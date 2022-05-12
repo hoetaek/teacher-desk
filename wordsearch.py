@@ -169,8 +169,8 @@ class Worksheet:
         # changing the page margins
         sections = self.document.sections
         for section in sections:
-            section.top_margin = Cm(1)
-            section.bottom_margin = Cm(0.8)
+            # section.top_margin = Cm(1)
+            # section.bottom_margin = Cm(0.8)
             section.left_margin = Cm(2.3)
             section.right_margin = Cm(2.3)
 
@@ -221,6 +221,71 @@ class Worksheet:
             return str(puzzle[i][j]).upper()
         else:
             return str(puzzle[i][j])
+
+    def add_hint_in_table(self):
+        word_num = len(words)
+        if word_num <= 15:
+            size = 5
+        elif word_num <= 21:
+            size = (word_num + 2) // 4
+        else:
+            size = 6
+        hint_table = self.document.add_table(
+            rows=(len(words) + size - 1) // size, cols=size, style="Table Grid"
+        )
+        hint_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+        for i, row in enumerate(hint_table.rows):
+            # accessing row xml and setting tr height
+            tr = row._tr
+            trPr = tr.get_or_add_trPr()
+            trHeight = OxmlElement("w:trHeight")
+            trHeight.set(qn("w:val"), "60")
+            trHeight.set(qn("w:hRule"), "atLeast")
+            trPr.append(trHeight)
+
+            for j, cell in enumerate(row.cells):
+                index = i * size + j
+
+                # 단어 수 만큼 반복하기
+                if index < len(words):
+                    for paragraph in cell.paragraphs:
+                        # 초성 또는 scramble이 켜져 있는 경우
+                        if self.chosung_scramable:
+                            word = words[index]
+                            if self.lang == Language.KOREAN:
+                                cho_word = ""
+                                for chr in word:
+                                    chosung_scramable = hgtk.letter.decompose(chr)[0]
+                                    cho_word += chosung_scramable
+                                run = paragraph.add_run(cho_word)
+                            else:
+                                # 사진 있고 영어고 scramble인 경우
+                                spelling = [i for i in word]
+                                shuffle(spelling)
+                                scrambled_word = "".join(spelling)
+                                if self.uppercase:
+                                    run = paragraph.add_run(scrambled_word.upper())
+                                else:
+                                    run = paragraph.add_run(scrambled_word)
+                        else:
+                            if self.uppercase and not self.korean:
+                                run = paragraph.add_run(words[index].upper())
+                            else:
+                                run = paragraph.add_run(words[index])
+                        font = run.font
+                        font.name = "Arial"
+                        font.size = Pt(13)
+
+                        #####가운데 정렬!!
+                        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                        paragraph.style.font.bold = True
+                #####상하 방향에서 가운데 정렬
+                tc = cell._tc
+                tcPr = tc.get_or_add_tcPr()
+                tcVAlign = OxmlElement("w:vAlign")
+                tcVAlign.set(qn("w:val"), "center")
+                tcPr.append(tcVAlign)
 
     def add_hint(self):
         # 힌트 테이블 만들기
@@ -312,7 +377,8 @@ class Worksheet:
     def write(self):
         self.add_heading()
         self.add_puzzle()
-        self.add_hint()
+        self.document.add_paragraph()
+        self.add_hint_in_table()
 
     def write_answer(self, puzzle_data: Puzzle):
         width = puzzle_data.width
@@ -389,6 +455,7 @@ if __name__ == "__main__":
         "triangle",
         "opera",
         "gravity",
+        "feelings",
     ]
 
     puzzle.enter(words)
