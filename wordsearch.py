@@ -29,7 +29,7 @@ class Direction(Enum):
     BACKWARD = 3
 
 
-class Puzzle:
+class PuzzleData:
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -169,7 +169,7 @@ class Worksheet:
         self.uppercase = True
         self.chosung_scramable = True
 
-    def configure_settings(self, puzzle_data: Puzzle):
+    def configure_settings(self, puzzle_data: PuzzleData):
         self.width = puzzle_data.width
         self.height = puzzle_data.height
         self.puzzle = puzzle_data.puzzle
@@ -392,7 +392,7 @@ class Worksheet:
         self.document.add_paragraph()
         self.add_hint_in_table()
 
-    def write_answer(self, puzzle_data: Puzzle):
+    def write_answer(self, puzzle_data: PuzzleData):
         width = puzzle_data.width
         height = puzzle_data.height
         puzzle = puzzle_data.answer
@@ -441,7 +441,7 @@ class Worksheet:
 
 
 if __name__ == "__main__":
-    puzzle = Puzzle(20, 20)
+    puzzle = PuzzleData(20, 20)
     words = [
         "hello",
         "python",
