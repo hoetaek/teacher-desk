@@ -77,9 +77,21 @@ class Puzzle:
     def fill_random_letters(self):
         for i in range(self.height):
             for j in range(self.width):
-                fill_alph = random.choice(string.ascii_lowercase)
+                fill_alph = self.get_random_letter()
                 if self.puzzle[i][j] == 0:
                     self.puzzle[i][j] = fill_alph
+
+    def get_random_letter(self, korean=False):
+        f = open("random_words.txt", "r")
+        data = f.read()
+        regex_f = r"[가-힣]+"
+        search_target_f = data
+        data = "".join(list(set(re.findall(regex_f, search_target_f))))
+        if korean:
+            fill_alph = random.choice(data)
+        else:
+            random.choice(string.ascii_lowercase)
+        return fill_alph
 
     def word_position_exists(self, word, word_positions):
         word_zero = "0" * len(word)
