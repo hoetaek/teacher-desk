@@ -227,7 +227,7 @@ class Worksheet:
             section.left_margin = Cm(2.3)
             section.right_margin = Cm(2.3)
 
-    def add_heading(self, grade, class_num):
+    def add_heading(self, grade: str = "__", class_num: str = "__"):
         head = self.document.add_heading(self.heading, 0)
         head.alignment = WD_ALIGN_PARAGRAPH.CENTER
         belong = f"{grade}학년 {class_num}반 이름: _______"
