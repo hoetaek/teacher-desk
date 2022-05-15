@@ -33,7 +33,6 @@ class PuzzleData:
         width: int,
         height: int,
         words,
-        lang: Language,
         is_uppercase: bool = False,
         is_scramble: bool = False,
     ):
@@ -43,9 +42,13 @@ class PuzzleData:
         self.puzzle = [[0 for _ in range(width)] for _ in range(height)]
         self.words = words
 
-        if lang == Language.KOREAN and is_uppercase == True:
+        self.lang: Language
+        if hgtk.checker.is_hangul(words[0]):
+            self.lang = Language.KOREAN
+        else:
+            self.lang = Language.ENGLISH
+        if self.lang == Language.KOREAN and is_uppercase == True:
             raise ValueError("There is no uppercase in Korean")
-        self.lang = lang
         self.is_uppercase = is_uppercase
         self.is_scramble = is_scramble
 
@@ -83,8 +86,6 @@ class PuzzleData:
     def __make_puzzle(self):
         for word in self.words:
             entering_word_succeed = False
-            print(word)
-
             try_num = 0
             max_try = 30
             while not entering_word_succeed:
@@ -193,7 +194,6 @@ class PuzzleDifficultyOption:
         self.difficulty = difficulty
 
     def get_option(self):
-        print(f"difficulty is {self.difficulty}")
         self.get_random_option()
         match self.difficulty:
             case 1:
@@ -409,7 +409,7 @@ if __name__ == "__main__":
     ]
     korean_words = ["경찰관", "오늘의음식점", "낱말찾기퍼즐", "한국어", "민주주의", "헌법", "법원"]
     puzzle_data = PuzzleData(
-        20, 20, english_words, Language.ENGLISH, is_uppercase=False, is_scramble=False
+        20, 20, english_words, is_uppercase=False, is_scramble=False
     )
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
