@@ -102,7 +102,7 @@ class PuzzleData:
                 try_num += 1
                 if try_num > max_try:
                     self.__empty_puzzle()
-                    self.make_puzzle(english_words)
+                    self.__make_puzzle(english_words)
 
         self.answer = copy.deepcopy(self.puzzle)
         self.fill_random_letters()
@@ -432,7 +432,9 @@ if __name__ == "__main__":
         "feelings",
     ]
     korean_words = ["경찰관", "오늘의음식점", "낱말찾기퍼즐", "한국어", "민주주의", "헌법", "법원"]
-    puzzle_data = PuzzleData(20, 20, korean_words, Language.KOREAN, False, False)
+    puzzle_data = PuzzleData(
+        20, 20, english_words, Language.ENGLISH, is_uppercase=False, is_scramble=False
+    )
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
     worksheet.configure_settings()
