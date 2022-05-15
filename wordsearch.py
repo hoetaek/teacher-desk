@@ -5,7 +5,7 @@ from typing import List, Tuple
 import hgtk
 import re
 import string
-from enum import Enum
+from enum import Enum, IntEnum
 from random import randint, shuffle
 
 from docx import Document
@@ -16,10 +16,10 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
 
 
-class Direction(Enum):
+class Direction(IntEnum):
     FORWARD = 1
-    STEADY = 2
-    BACKWARD = 3
+    STEADY = 0
+    BACKWARD = -1
 
 
 class Language(Enum):
@@ -88,8 +88,7 @@ class PuzzleData:
             try_num = 0
             max_try = 30
             while not entering_word_succeed:
-                print(try_num)
-                puzzle_option = PuzzleDifficultyOption()
+                puzzle_option = PuzzleDifficultyOption(difficulty=3)
                 puzzle_option.get_option()
                 word_positions = WordPosition(
                     word, self.width, self.height
@@ -168,7 +167,7 @@ class WordPosition:
                     i for i in range(start_position, start_position + word_length)
                 ]
             case Direction.STEADY:
-                start_position = randint(1, total_length) - 1
+                start_position = randint(0, total_length - 1)
                 positions = [start_position for _ in range(word_length)]
             case Direction.BACKWARD:
                 start_position = randint(word_length, total_length - 1)
@@ -190,12 +189,38 @@ class WordPosition:
 
 
 class PuzzleDifficultyOption:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, difficulty=1) -> None:
+        self.difficulty = difficulty
 
     def get_option(self):
-        self.x_direction = Direction.FORWARD  # random.choice(list(Direction))
-        self.y_direction = Direction.STEADY  # random.choice(list(Direction))
+        print(f"difficulty is {self.difficulty}")
+        self.get_random_option()
+        match self.difficulty:
+            case 1:
+                self.randomize_until_conditions_met(
+                    lambda: self.x_direction + self.y_direction == 1
+                )
+            case 2:
+                self.randomize_until_conditions_met(lambda: self.x_direction == 1)
+            case 3:
+                self.randomize_until_conditions_met(
+                    lambda: self.x_direction == -1 or self.x_direction == 1
+                )
+
+    def get_random_option(self):
+        self.x_direction = random.choice(list(Direction))
+        self.y_direction = random.choice(list(Direction))
+        while self.x_direction == 0 and self.y_direction == 0:
+            self.get_random_option()
+
+    def randomize_until_conditions_met(self, condition):
+        difficulty_configured = False
+        if condition():
+            difficulty_configured = True
+        while not difficulty_configured:
+            self.get_random_option()
+            if condition():
+                difficulty_configured = True
 
 
 class Worksheet:
