@@ -103,7 +103,7 @@ class PuzzleData:
                 try_num += 1
                 if try_num > max_try:
                     self.__empty_puzzle()
-                    self.__make_puzzle(english_words)
+                    self.__make_puzzle()
 
         self.answer = copy.deepcopy(self.puzzle)
         self.__fill_random_letters()
