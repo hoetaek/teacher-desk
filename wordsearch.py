@@ -325,30 +325,6 @@ class Worksheet:
                 tcVAlign.set(qn("w:val"), "center")
                 tcPr.append(tcVAlign)
 
-    def add_hint(self):
-        # 힌트 테이블 만들기
-        if self.lang == Language.ENGLISH:
-            hint_table = self.document.add_table(rows=1, cols=1, style="Table Grid")
-            hint_table.alignment = WD_TABLE_ALIGNMENT.CENTER
-            hint_table_row = hint_table.rows[0]
-            hint_tr = hint_table_row._tr
-            hint_trPr = hint_tr.get_or_add_trPr()
-            hint_trHeight = OxmlElement("w:trHeight")
-            hint_trHeight.set(qn("w:val"), "1000")
-            hint_trHeight.set(qn("w:hRule"), "atLeast")
-            hint_trPr.append(hint_trHeight)
-            hint_table_cell = hint_table_row.cells[0]
-            hint = ", ".join(self.hint)
-            hint_table_cell.width = Inches(100)
-            for paragraph in hint_table_cell.paragraphs:
-                paragraph.add_run(hint.strip(", "))
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-            tc = hint_table_cell._tc
-            tcPr = tc.get_or_add_tcPr()
-            tcVAlign = OxmlElement("w:vAlign")
-            tcVAlign.set(qn("w:val"), "center")
-            tcPr.append(tcVAlign)
-
     def write(self):
         self.add_heading()
         self.add_puzzle()
