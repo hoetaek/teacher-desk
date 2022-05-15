@@ -97,8 +97,8 @@ class PuzzleData:
                     puzzle_option.x_direction,
                     puzzle_option.y_direction,
                 )
-                if self.word_position_exists(word, word_positions):
-                    self.fill_word(word, word_positions)
+                if self.__word_position_exists(word, word_positions):
+                    self.__fill_word(word, word_positions)
                     entering_word_succeed = True
                 try_num += 1
                 if try_num > max_try:
@@ -106,22 +106,22 @@ class PuzzleData:
                     self.__make_puzzle(english_words)
 
         self.answer = copy.deepcopy(self.puzzle)
-        self.fill_random_letters()
+        self.__fill_random_letters()
         [print(i) for i in self.puzzle]
 
-    def fill_word(self, word: str, word_positions):
+    def __fill_word(self, word: str, word_positions):
         x_y_seperated_positions = list(zip(*word_positions))
         for letter, x, y in zip(word, *x_y_seperated_positions):
             self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
 
-    def fill_random_letters(self):
+    def __fill_random_letters(self):
         for i in range(self.height):
             for j in range(self.width):
-                fill_alph = self.get_random_letter()
+                fill_alph = self.__get_random_letter()
                 if self.puzzle[i][j] == 0:
                     self.puzzle[i][j] = fill_alph
 
-    def get_random_letter(self):
+    def __get_random_letter(self):
         fill_alph: str
         match self.lang:
             case Language.KOREAN:
@@ -135,7 +135,7 @@ class PuzzleData:
                 fill_alph = random.choice(string.ascii_lowercase)
         return fill_alph
 
-    def word_position_exists(self, word, word_positions):
+    def __word_position_exists(self, word, word_positions):
         word_made_in_zero = "0" * len(word)
         word_in_puzzle = ""
         for x, y in word_positions:
@@ -197,13 +197,13 @@ class PuzzleDifficultyOption:
         self.get_random_option()
         match self.difficulty:
             case 1:
-                self.randomize_until_conditions_met(
+                self.__randomize_until_conditions_met(
                     lambda: self.x_direction + self.y_direction == 1
                 )
             case 2:
-                self.randomize_until_conditions_met(lambda: self.x_direction == 1)
+                self.__randomize_until_conditions_met(lambda: self.x_direction == 1)
             case 3:
-                self.randomize_until_conditions_met(
+                self.__randomize_until_conditions_met(
                     lambda: self.x_direction == -1 or self.x_direction == 1
                 )
 
@@ -213,7 +213,7 @@ class PuzzleDifficultyOption:
         while self.x_direction == 0 and self.y_direction == 0:
             self.get_random_option()
 
-    def randomize_until_conditions_met(self, condition):
+    def __randomize_until_conditions_met(self, condition):
         difficulty_configured = False
         if condition():
             difficulty_configured = True
@@ -231,8 +231,9 @@ class Worksheet:
         self.puzzle = puzzle_data.puzzle
         self.hint: List[str] = puzzle_data.hint
         self.answer = puzzle_data.answer
+        self.__configure_settings()
 
-    def configure_settings(self):
+    def __configure_settings(self):
         # write to docx file
         # Write to docx to puzzle.docx
         self.document = Document()
@@ -244,14 +245,14 @@ class Worksheet:
             section.left_margin = Cm(2.3)
             section.right_margin = Cm(2.3)
 
-    def add_heading(self, grade: str = "__", class_num: str = "__"):
+    def __add_heading(self, grade: str = "__", class_num: str = "__"):
         head = self.document.add_heading(self.heading, 0)
         head.alignment = WD_ALIGN_PARAGRAPH.CENTER
         belong = f"{grade}학년 {class_num}반 이름: _______"
         para_belong = self.document.add_paragraph(belong)
         para_belong.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
-    def add_puzzle(self):
+    def __add_puzzle(self):
         puzzle_table = self.document.add_table(
             rows=self.height, cols=self.width, style="Table Grid"
         )
@@ -282,7 +283,7 @@ class Worksheet:
                 tcVAlign.set(qn("w:val"), "center")
                 tcPr.append(tcVAlign)
 
-    def add_hint_in_table(self):
+    def __add_hint_in_table(self):
         word_num = len(self.hint)
         if word_num <= 15:
             size = 5
@@ -326,21 +327,16 @@ class Worksheet:
                 tcPr.append(tcVAlign)
 
     def write(self):
-        self.add_heading()
-        self.add_puzzle()
+        self.__add_heading()
+        self.__add_puzzle()
         self.document.add_paragraph()
-        self.add_hint_in_table()
+        self.__add_hint_in_table()
 
-    def write_answer(self, puzzle_data: PuzzleData):
-        width = puzzle_data.width
-        height = puzzle_data.height
-        puzzle = puzzle_data.answer
-        print(puzzle)
-
+    def write_answer(self):
         # 정답 파일 쓰기
         self.answ_doc = Document()
         answer_table = self.answ_doc.add_table(
-            rows=height, cols=width, style="Table Grid"
+            rows=self.height, cols=self.width, style="Table Grid"
         )
         answer_table.alignment = WD_TABLE_ALIGNMENT.CENTER
         for i, row in enumerate(answer_table.rows):
@@ -413,7 +409,6 @@ if __name__ == "__main__":
     )
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
-    worksheet.configure_settings()
     worksheet.write()
     worksheet.write_answer(puzzle_data)
     worksheet.save("filename")
