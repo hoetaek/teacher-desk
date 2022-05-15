@@ -97,7 +97,7 @@ class PuzzleData:
                     puzzle_option.x_direction,
                     puzzle_option.y_direction,
                 )
-                if self.__word_position_exists(word, word_positions):
+                if self.__place_for_word_exists(word, word_positions):
                     self.__fill_word(word, word_positions)
                     entering_word_succeed = True
                 try_num += 1
@@ -135,7 +135,7 @@ class PuzzleData:
                 fill_alph = random.choice(string.ascii_lowercase)
         return fill_alph
 
-    def __word_position_exists(self, word, word_positions):
+    def __place_for_word_exists(self, word, word_positions):
         word_made_in_zero = "0" * len(word)
         word_in_puzzle = ""
         for x, y in word_positions:
