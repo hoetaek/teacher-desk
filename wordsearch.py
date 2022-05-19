@@ -27,19 +27,97 @@ class Language(Enum):
     ENGLISH = 2
 
 
+class Difficulty(Enum):
+    EASY = 1
+    NORMAL = 2
+    DIFFICULT = 2
+
+
+class PuzzleDifficultyOption:
+    def __init__(self, difficulty: Difficulty) -> None:
+        self.difficulty = difficulty
+        match difficulty:
+            case Difficulty.EASY:
+                self.width = 10
+                self.height = 10
+
+            case Difficulty.NORMAL:
+                self.width = 20
+                self.height = 20
+
+            case Difficulty.DIFFICULT:
+                self.width = 25
+                self.height = 25
+
+    def configure(self, words: List[str]):
+        self.__adjust_size(words)
+        self.__get_random_option()
+
+    def __adjust_size(self, words):
+        longest_word = sorted(words, key=len, reverse=True)[0]
+        try:
+            self.__validate(longest_word)
+        except ValueError:
+            self.width = self.height = (len(longest_word) // 5 + 1) * 5
+
+    def __validate(self, longest_word):
+        if len(longest_word) >= self.width:
+            raise ValueError("Width of puzzle can not be smaller than given word")
+        elif len(longest_word) >= self.height:
+            raise ValueError("Height of puzzle can not be smaller than given word")
+
+    def get_option(self):
+        self.__get_random_option()
+        match self.difficulty:
+            case Difficulty.EASY:
+                self.__randomize_until_conditions_met(
+                    lambda: self.x_direction + self.y_direction == 1
+                )
+            case Difficulty.NORMAL:
+                self.__randomize_until_conditions_met(
+                    random.choice(
+                        [
+                            lambda: self.x_direction + self.y_direction == 1,
+                            lambda: self.x_direction == 1 and self.y_direction != 0,
+                        ]
+                    )
+                )
+
+            case Difficulty.DIFFICULT:
+                self.__randomize_until_conditions_met(
+                    random.choice(
+                        [
+                            lambda: self.x_direction == 1,
+                            lambda: self.x_direction == -1 or self.x_direction == 1,
+                        ]
+                    )
+                )
+
+    def __get_random_option(self):
+        self.x_direction = random.choice(list(Direction))
+        self.y_direction = random.choice(list(Direction))
+        while self.x_direction == 0 and self.y_direction == 0:
+            self.__get_random_option()
+
+    def __randomize_until_conditions_met(self, condition):
+        difficulty_configured = False
+        if condition():
+            difficulty_configured = True
+        while not difficulty_configured:
+            self.__get_random_option()
+            if condition():
+                difficulty_configured = True
+
+
 class PuzzleData:
     def __init__(
         self,
-        width: int,
-        height: int,
         words,
+        puzzle_difficulty_option: PuzzleDifficultyOption,
         is_uppercase: bool = False,
-        is_scramble: bool = False,
+        is_puzzle_twist: bool = False,
     ):
-        self.width = width
-        self.height = height
 
-        self.puzzle = [[0 for _ in range(width)] for _ in range(height)]
         self.words = words
 
         self.lang: Language
@@ -49,8 +127,27 @@ class PuzzleData:
             self.lang = Language.ENGLISH
         if self.lang == Language.KOREAN and is_uppercase == True:
             raise ValueError("There is no uppercase in Korean")
+
         self.is_uppercase = is_uppercase
-        self.is_scramble = is_scramble
+        self.is_hint_twist = is_puzzle_twist
+
+        self.set_difficulty_option(puzzle_difficulty_option)
+
+    def set_difficulty_option(self, puzzle_difficulty_option: PuzzleDifficultyOption):
+        puzzle_difficulty_option.configure(self.words)
+        self.difficulty_option = puzzle_difficulty_option
+        self.puzzle = [
+            [0 for _ in range(puzzle_difficulty_option.width)]
+            for _ in range(puzzle_difficulty_option.height)
+        ]
+
+    @property
+    def width(self):
+        return self.difficulty_option.width
+
+    @property
+    def height(self):
+        return self.difficulty_option.height
 
     def make(self):
         self.__make_heading()
@@ -69,7 +166,7 @@ class PuzzleData:
         for word in self.words:
             if self.is_uppercase:
                 word = word.upper()
-            if self.is_scramble:
+            if self.is_hint_twist:
                 match self.lang:
                     case Language.ENGLISH:
                         spelling = [i for i in word]
@@ -84,21 +181,23 @@ class PuzzleData:
             self.hint.append(word)
 
     def __make_puzzle(self):
-        for word in self.words:
+        for word in sorted(self.words, key=len, reverse=True):
             entering_word_succeed = False
             try_num = 0
             max_try = 30
             while not entering_word_succeed:
-                puzzle_option = PuzzleDifficultyOption(difficulty=3)
-                puzzle_option.get_option()
+                self.difficulty_option.get_option()
                 word_positions = WordPosition(
-                    word, self.width, self.height
-                ).get_word_positions(
-                    puzzle_option.x_direction,
-                    puzzle_option.y_direction,
+                    word,
+                    self.difficulty_option.width,
+                    self.difficulty_option.height,
                 )
-                if self.__place_for_word_exists(word, word_positions):
-                    self.__fill_word(word, word_positions)
+                positions = word_positions.get_word_positions(
+                    self.difficulty_option.x_direction,
+                    self.difficulty_option.y_direction,
+                )
+                if self.__place_for_word_exists(word, positions):
+                    self.__fill_word(word, positions)
                     entering_word_succeed = True
                 try_num += 1
                 if try_num > max_try:
@@ -115,8 +214,8 @@ class PuzzleData:
             self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
 
     def __fill_random_letters(self):
-        for i in range(self.height):
-            for j in range(self.width):
+        for i in range(self.difficulty_option.height):
+            for j in range(self.difficulty_option.width):
                 fill_alph = self.__get_random_letter()
                 if self.puzzle[i][j] == 0:
                     self.puzzle[i][j] = fill_alph
@@ -138,6 +237,7 @@ class PuzzleData:
     def __place_for_word_exists(self, word, word_positions):
         word_made_in_zero = "0" * len(word)
         word_in_puzzle = ""
+
         for x, y in word_positions:
             word_in_puzzle += str(self.puzzle[y][x])
         if word_made_in_zero == word_in_puzzle:
@@ -149,7 +249,10 @@ class PuzzleData:
             return True
 
     def __empty_puzzle(self):
-        self.puzzle = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        self.puzzle = [
+            [0 for _ in range(self.difficulty_option.width)]
+            for _ in range(self.difficulty_option.height)
+        ]
 
 
 class WordPosition:
@@ -187,40 +290,6 @@ class WordPosition:
             )
         )
         return word_positions
-
-
-class PuzzleDifficultyOption:
-    def __init__(self, difficulty=1) -> None:
-        self.difficulty = difficulty
-
-    def get_option(self):
-        self.get_random_option()
-        match self.difficulty:
-            case 1:
-                self.__randomize_until_conditions_met(
-                    lambda: self.x_direction + self.y_direction == 1
-                )
-            case 2:
-                self.__randomize_until_conditions_met(lambda: self.x_direction == 1)
-            case 3:
-                self.__randomize_until_conditions_met(
-                    lambda: self.x_direction == -1 or self.x_direction == 1
-                )
-
-    def get_random_option(self):
-        self.x_direction = random.choice(list(Direction))
-        self.y_direction = random.choice(list(Direction))
-        while self.x_direction == 0 and self.y_direction == 0:
-            self.get_random_option()
-
-    def __randomize_until_conditions_met(self, condition):
-        difficulty_configured = False
-        if condition():
-            difficulty_configured = True
-        while not difficulty_configured:
-            self.get_random_option()
-            if condition():
-                difficulty_configured = True
 
 
 class Worksheet:
@@ -396,7 +465,7 @@ if __name__ == "__main__":
         "wording",
         "punch",
         "perfume",
-        "hemisphere",
+        "hemisphawegaewgaew",
         "training",
         "triangle",
         "opera",
@@ -404,14 +473,17 @@ if __name__ == "__main__":
         "feelings",
     ]
     korean_words = ["경찰관", "오늘의음식점", "낱말찾기퍼즐", "한국어", "민주주의", "헌법", "법원"]
+
+    puzzle_difficulty_option = PuzzleDifficultyOption(Difficulty.EASY)
     puzzle_data = PuzzleData(
-        20, 20, english_words, is_uppercase=False, is_scramble=False
+        korean_words,
+        puzzle_difficulty_option,
+        is_uppercase=False,
+        is_puzzle_twist=False,
     )
+    # puzzle_data.set_difficulty_option(PuzzleDifficultyOption(Difficulty.NORMAL))
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
     worksheet.write()
-    worksheet.write_answer(puzzle_data)
+    worksheet.write_answer()
     worksheet.save("filename")
-
-    # document = Document()
-    # document.save("test.docx")
