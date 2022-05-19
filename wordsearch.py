@@ -53,6 +53,9 @@ class PuzzleDifficultyOption:
         self.__adjust_size(words)
         self.__get_random_option()
 
+    def resize_bigger(self):
+        self.width = self.height = self.width + 5
+
     def __adjust_size(self, words):
         longest_word = sorted(words, key=len, reverse=True)[0]
         try:
@@ -151,7 +154,9 @@ class PuzzleData:
 
     def make(self):
         self.__make_heading()
-        self.__make_puzzle()
+        while self.__make_puzzle() == False:
+            self.difficulty_option.resize_bigger()
+            self.__empty_puzzle()
         self.__make_hint()
 
     def __make_heading(self):
@@ -201,12 +206,12 @@ class PuzzleData:
                     entering_word_succeed = True
                 try_num += 1
                 if try_num > max_try:
-                    self.__empty_puzzle()
-                    self.__make_puzzle()
+                    return False
 
         self.answer = copy.deepcopy(self.puzzle)
         self.__fill_random_letters()
         [print(i) for i in self.puzzle]
+        return True
 
     def __fill_word(self, word: str, word_positions):
         x_y_seperated_positions = list(zip(*word_positions))
@@ -465,7 +470,7 @@ if __name__ == "__main__":
         "wording",
         "punch",
         "perfume",
-        "hemisphawegaewgaew",
+        "hemispher",
         "training",
         "triangle",
         "opera",
@@ -476,7 +481,7 @@ if __name__ == "__main__":
 
     puzzle_difficulty_option = PuzzleDifficultyOption(Difficulty.EASY)
     puzzle_data = PuzzleData(
-        korean_words,
+        english_words,
         puzzle_difficulty_option,
         is_uppercase=False,
         is_puzzle_twist=False,
