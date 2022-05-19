@@ -138,7 +138,7 @@ class PuzzleData:
 
     def set_difficulty_option(self, puzzle_difficulty_option: PuzzleDifficultyOption):
         puzzle_difficulty_option.configure(self.words)
-        self.difficulty_option = puzzle_difficulty_option
+        self.__difficulty_option = puzzle_difficulty_option
         self.puzzle = [
             [0 for _ in range(puzzle_difficulty_option.width)]
             for _ in range(puzzle_difficulty_option.height)
@@ -146,16 +146,16 @@ class PuzzleData:
 
     @property
     def width(self):
-        return self.difficulty_option.width
+        return self.__difficulty_option.width
 
     @property
     def height(self):
-        return self.difficulty_option.height
+        return self.__difficulty_option.height
 
     def make(self):
         self.__make_heading()
         while self.__make_puzzle() == False:
-            self.difficulty_option.resize_bigger()
+            self.__difficulty_option.resize_bigger()
             self.__empty_puzzle()
         self.__make_hint()
 
@@ -191,15 +191,15 @@ class PuzzleData:
             try_num = 0
             max_try = 30
             while not entering_word_succeed:
-                self.difficulty_option.get_option()
+                self.__difficulty_option.get_option()
                 word_positions = WordPosition(
                     word,
-                    self.difficulty_option.width,
-                    self.difficulty_option.height,
+                    self.__difficulty_option.width,
+                    self.__difficulty_option.height,
                 )
                 positions = word_positions.get_word_positions(
-                    self.difficulty_option.x_direction,
-                    self.difficulty_option.y_direction,
+                    self.__difficulty_option.x_direction,
+                    self.__difficulty_option.y_direction,
                 )
                 if self.__place_for_word_exists(word, positions):
                     self.__fill_word(word, positions)
@@ -219,8 +219,8 @@ class PuzzleData:
             self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
 
     def __fill_random_letters(self):
-        for i in range(self.difficulty_option.height):
-            for j in range(self.difficulty_option.width):
+        for i in range(self.__difficulty_option.height):
+            for j in range(self.__difficulty_option.width):
                 fill_alph = self.__get_random_letter()
                 if self.puzzle[i][j] == 0:
                     self.puzzle[i][j] = fill_alph
@@ -255,8 +255,8 @@ class PuzzleData:
 
     def __empty_puzzle(self):
         self.puzzle = [
-            [0 for _ in range(self.difficulty_option.width)]
-            for _ in range(self.difficulty_option.height)
+            [0 for _ in range(self.__difficulty_option.width)]
+            for _ in range(self.__difficulty_option.height)
         ]
 
 
