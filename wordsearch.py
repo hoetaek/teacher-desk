@@ -1,13 +1,13 @@
+import collections
 import copy
 import random
-from typing import List, Tuple
-
-import hgtk
 import re
 import string
 from enum import Enum, IntEnum
 from random import randint, shuffle
+from typing import List, Tuple
 
+import hgtk
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -36,7 +36,7 @@ class Difficulty(Enum):
 class PuzzleDifficultyOption:
     def __init__(self, difficulty: Difficulty) -> None:
         self.difficulty = difficulty
-        match difficulty:
+        match self.difficulty:
             case Difficulty.EASY:
                 self.width = 10
                 self.height = 10
@@ -51,33 +51,52 @@ class PuzzleDifficultyOption:
 
     def configure(self, words: List[str]):
         self.__adjust_size(words)
-        self.__get_random_option()
+        self.__get_random_direction_options()
 
     def resize_bigger(self):
         self.width = self.height = self.width + 5
 
+    def revise_source_letters(self, words, source_letters):
+        top_common_letters = self.__get_top5_common_letters(words, 5)
+
+        match self.difficulty:
+            case Difficulty.EASY:
+                return source_letters
+
+            case Difficulty.NORMAL:
+                return "".join(random.sample(source_letters, 17)) + top_common_letters
+
+            case Difficulty.DIFFICULT:
+                return "".join(random.sample(source_letters, 10)) + top_common_letters
+
+    def __get_top5_common_letters(self, words, common_num: int):
+        string = "".join(words)
+        return "".join(
+            [i[0] for i in collections.Counter(string).most_common(common_num)]
+        )
+
     def __adjust_size(self, words):
         longest_word = sorted(words, key=len, reverse=True)[0]
         try:
-            self.__validate(longest_word)
+            self.__validate_size(longest_word)
         except ValueError:
             self.width = self.height = (len(longest_word) // 5 + 1) * 5
 
-    def __validate(self, longest_word):
+    def __validate_size(self, longest_word):
         if len(longest_word) >= self.width:
             raise ValueError("Width of puzzle can not be smaller than given word")
         elif len(longest_word) >= self.height:
             raise ValueError("Height of puzzle can not be smaller than given word")
 
-    def get_option(self):
-        self.__get_random_option()
+    def get_direction_options(self):
+        self.__get_random_direction_options()
         match self.difficulty:
             case Difficulty.EASY:
-                self.__randomize_until_conditions_met(
+                self.__randomize_directions_until_conditions_met(
                     lambda: self.x_direction + self.y_direction == 1
                 )
             case Difficulty.NORMAL:
-                self.__randomize_until_conditions_met(
+                self.__randomize_directions_until_conditions_met(
                     random.choice(
                         [
                             lambda: self.x_direction + self.y_direction == 1,
@@ -87,7 +106,7 @@ class PuzzleDifficultyOption:
                 )
 
             case Difficulty.DIFFICULT:
-                self.__randomize_until_conditions_met(
+                self.__randomize_directions_until_conditions_met(
                     random.choice(
                         [
                             lambda: self.x_direction == 1,
@@ -96,18 +115,18 @@ class PuzzleDifficultyOption:
                     )
                 )
 
-    def __get_random_option(self):
+    def __get_random_direction_options(self):
         self.x_direction = random.choice(list(Direction))
         self.y_direction = random.choice(list(Direction))
         while self.x_direction == 0 and self.y_direction == 0:
-            self.__get_random_option()
+            self.__get_random_direction_options()
 
-    def __randomize_until_conditions_met(self, condition):
+    def __randomize_directions_until_conditions_met(self, condition):
         difficulty_configured = False
         if condition():
             difficulty_configured = True
         while not difficulty_configured:
-            self.__get_random_option()
+            self.__get_random_direction_options()
             if condition():
                 difficulty_configured = True
 
@@ -191,7 +210,7 @@ class PuzzleData:
             try_num = 0
             max_try = 30
             while not entering_word_succeed:
-                self.__difficulty_option.get_option()
+                self.__difficulty_option.get_direction_options()
                 word_positions = WordPosition(
                     word,
                     self.__difficulty_option.width,
@@ -226,7 +245,7 @@ class PuzzleData:
                     self.puzzle[i][j] = fill_alph
 
     def __get_random_letter(self):
-        fill_alph: str
+        letter_to_fill: str
         match self.lang:
             case Language.KOREAN:
                 f = open("random_words.txt", "r")
@@ -234,10 +253,16 @@ class PuzzleData:
                 regex_f = r"[가-힣]+"
                 search_target_f = data
                 data = "".join(list(set(re.findall(regex_f, search_target_f))))
-                fill_alph = random.choice(data)
+                source_letters = data
             case Language.ENGLISH:
-                fill_alph = random.choice(string.ascii_lowercase)
-        return fill_alph
+                source_letters = string.ascii_lowercase
+
+        source_letters = self.__difficulty_option.revise_source_letters(
+            self.words, source_letters
+        )
+        print(source_letters)
+        letter_to_fill = random.choice(source_letters)
+        return letter_to_fill
 
     def __place_for_word_exists(self, word, word_positions):
         word_made_in_zero = "0" * len(word)
@@ -479,9 +504,9 @@ if __name__ == "__main__":
     ]
     korean_words = ["경찰관", "오늘의음식점", "낱말찾기퍼즐", "한국어", "민주주의", "헌법", "법원"]
 
-    puzzle_difficulty_option = PuzzleDifficultyOption(Difficulty.EASY)
+    puzzle_difficulty_option = PuzzleDifficultyOption(Difficulty.DIFFICULT)
     puzzle_data = PuzzleData(
-        english_words,
+        korean_words,
         puzzle_difficulty_option,
         is_uppercase=False,
         is_puzzle_twist=False,
