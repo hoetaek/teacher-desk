@@ -57,7 +57,7 @@ class PuzzleDifficultyOption:
         self.width = self.height = self.width + 5
 
     def revise_source_letters(self, words, source_letters):
-        top_common_letters = self.__get_top5_common_letters(words, 5)
+        top_common_letters = self.__get_top_common_letters(words, 5)
 
         match self.difficulty:
             case Difficulty.EASY:
@@ -69,7 +69,7 @@ class PuzzleDifficultyOption:
             case Difficulty.DIFFICULT:
                 return "".join(random.sample(source_letters, 10)) + top_common_letters
 
-    def __get_top5_common_letters(self, words, common_num: int):
+    def __get_top_common_letters(self, words, common_num: int):
         string = "".join(words)
         return "".join(
             [i[0] for i in collections.Counter(string).most_common(common_num)]
