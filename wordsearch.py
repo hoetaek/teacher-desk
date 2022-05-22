@@ -30,7 +30,7 @@ class Language(Enum):
 class Difficulty(Enum):
     EASY = 1
     NORMAL = 2
-    DIFFICULT = 2
+    DIFFICULT = 3
 
 
 class PuzzleDifficultyOption:
@@ -56,7 +56,7 @@ class PuzzleDifficultyOption:
     def resize_bigger(self):
         self.width = self.height = self.width + 5
 
-    def revise_source_letters(self, words, source_letters):
+    def revise_source_letters(self, words: str, source_letters):
         top_common_letters = self.__get_top_common_letters(words, 5)
 
         match self.difficulty:
@@ -138,7 +138,7 @@ class PuzzleData:
         words,
         puzzle_difficulty_option: PuzzleDifficultyOption,
         is_uppercase: bool = False,
-        is_puzzle_twist: bool = False,
+        is_hint_twist: bool = False,
     ):
 
         self.words = words
@@ -152,7 +152,7 @@ class PuzzleData:
             raise ValueError("There is no uppercase in Korean")
 
         self.is_uppercase = is_uppercase
-        self.is_hint_twist = is_puzzle_twist
+        self.is_hint_twist = is_hint_twist
 
         self.set_difficulty_option(puzzle_difficulty_option)
 
@@ -236,9 +236,8 @@ class PuzzleData:
         [print(i) for i in self.puzzle]
         return True
 
-    def __fill_word_in_puzzle(self, word: str, word_positions):
-        x_y_seperated_positions = list(zip(*word_positions))
-        for letter, x, y in zip(word, *x_y_seperated_positions):
+    def __fill_word_in_puzzle(self, word: str, word_positions: List[Tuple[int, int]]):
+        for letter, x, y in zip(word, *zip(*word_positions)):
             self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
 
     def __fill_random_letters(self):
@@ -264,23 +263,14 @@ class PuzzleData:
         source_letters = self.__difficulty_option.revise_source_letters(
             self.words, source_letters
         )
-        print(source_letters)
         letter_to_fill = random.choice(source_letters)
         return letter_to_fill
 
-    def __place_for_word_exists(self, word, word_positions):
-        word_made_in_zero = "0" * len(word)
-        word_in_puzzle = ""
-
-        for x, y in word_positions:
-            word_in_puzzle += str(self.puzzle[y][x])
-        if word_made_in_zero == word_in_puzzle:
-            return True
-        else:
-            for i in range(len(word)):
-                if word_in_puzzle[i] != word[i] and word_in_puzzle[i] != "0":
-                    return False
-            return True
+    def __place_for_word_exists(self, word, word_positions: List[Tuple[int, int]]):
+        for x, y, letter in zip(*zip(*word_positions), word):
+            if not (0 == self.puzzle[y][x] or letter == self.puzzle[y][x]):
+                return False
+        return True
 
     def __empty_puzzle(self):
         self.puzzle = [
@@ -513,7 +503,7 @@ if __name__ == "__main__":
         korean_words,
         puzzle_difficulty_option,
         is_uppercase=False,
-        is_puzzle_twist=False,
+        is_hint_twist=False,
     )
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
