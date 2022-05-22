@@ -51,7 +51,7 @@ class PuzzleDifficultyOption:
 
     def configure(self, words: List[str]):
         self.__adjust_size(words)
-        self.__get_random_direction_options()
+        self.__randomize_direction_options()
 
     def resize_bigger(self):
         self.width = self.height = self.width + 5
@@ -89,7 +89,7 @@ class PuzzleDifficultyOption:
             raise ValueError("Height of puzzle can not be smaller than given word")
 
     def get_direction_options(self):
-        self.__get_random_direction_options()
+        self.__randomize_direction_options()
         match self.difficulty:
             case Difficulty.EASY:
                 self.__randomize_directions_until_conditions_met(
@@ -114,19 +114,20 @@ class PuzzleDifficultyOption:
                         ]
                     )
                 )
+        return self.x_direction, self.y_direction
 
-    def __get_random_direction_options(self):
+    def __randomize_direction_options(self):
         self.x_direction = random.choice(list(Direction))
         self.y_direction = random.choice(list(Direction))
         while self.x_direction == 0 and self.y_direction == 0:
-            self.__get_random_direction_options()
+            self.__randomize_direction_options()
 
     def __randomize_directions_until_conditions_met(self, condition):
         difficulty_configured = False
         if condition():
             difficulty_configured = True
         while not difficulty_configured:
-            self.__get_random_direction_options()
+            self.__randomize_direction_options()
             if condition():
                 difficulty_configured = True
 
@@ -210,18 +211,21 @@ class PuzzleData:
             try_num = 0
             max_try = 30
             while not entering_word_succeed:
-                self.__difficulty_option.get_direction_options()
                 word_positions = WordPosition(
                     word,
                     self.__difficulty_option.width,
                     self.__difficulty_option.height,
                 )
+                (
+                    x_direction,
+                    y_direction,
+                ) = self.__difficulty_option.get_direction_options()
                 positions = word_positions.get_word_positions(
-                    self.__difficulty_option.x_direction,
-                    self.__difficulty_option.y_direction,
+                    x_direction,
+                    y_direction,
                 )
                 if self.__place_for_word_exists(word, positions):
-                    self.__fill_word(word, positions)
+                    self.__fill_word_in_puzzle(word, positions)
                     entering_word_succeed = True
                 try_num += 1
                 if try_num > max_try:
@@ -232,7 +236,7 @@ class PuzzleData:
         [print(i) for i in self.puzzle]
         return True
 
-    def __fill_word(self, word: str, word_positions):
+    def __fill_word_in_puzzle(self, word: str, word_positions):
         x_y_seperated_positions = list(zip(*word_positions))
         for letter, x, y in zip(word, *x_y_seperated_positions):
             self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
@@ -511,7 +515,6 @@ if __name__ == "__main__":
         is_uppercase=False,
         is_puzzle_twist=False,
     )
-    # puzzle_data.set_difficulty_option(PuzzleDifficultyOption(Difficulty.NORMAL))
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
     worksheet.write()
