@@ -1,11 +1,9 @@
-import collections
 import copy
 import random
 import re
 import string
-from enum import Enum, IntEnum
-from random import randint, shuffle
-from typing import List, Tuple
+from enum import Enum
+from random import shuffle
 
 import hgtk
 from docx import Document
@@ -15,11 +13,8 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
 
-
-class Direction(IntEnum):
-    FORWARD = 1
-    STEADY = 0
-    BACKWARD = -1
+from helper.wordsearch.difficulty_option import Difficulty, DifficultyOption
+from helper.wordsearch.word_position import WordPosition
 
 
 class Language(Enum):
@@ -27,116 +22,11 @@ class Language(Enum):
     ENGLISH = 2
 
 
-class Difficulty(Enum):
-    EASY = 1
-    NORMAL = 2
-    DIFFICULT = 3
-
-
-class PuzzleDifficultyOption:
-    def __init__(self, difficulty: Difficulty) -> None:
-        self.difficulty = difficulty
-        match self.difficulty:
-            case Difficulty.EASY:
-                self.width = 10
-                self.height = 10
-
-            case Difficulty.NORMAL:
-                self.width = 20
-                self.height = 20
-
-            case Difficulty.DIFFICULT:
-                self.width = 25
-                self.height = 25
-
-    def configure(self, words: List[str]):
-        self.__adjust_size(words)
-        self.__randomize_direction_options()
-
-    def resize_bigger(self):
-        self.width = self.height = self.width + 5
-
-    def revise_source_letters(self, words: str, source_letters):
-        top_common_letters = self.__get_top_common_letters(words, 5)
-
-        match self.difficulty:
-            case Difficulty.EASY:
-                return source_letters
-
-            case Difficulty.NORMAL:
-                return "".join(random.sample(source_letters, 17)) + top_common_letters
-
-            case Difficulty.DIFFICULT:
-                return "".join(random.sample(source_letters, 10)) + top_common_letters
-
-    def __get_top_common_letters(self, words, common_num: int):
-        string = "".join(words)
-        return "".join(
-            [i[0] for i in collections.Counter(string).most_common(common_num)]
-        )
-
-    def __adjust_size(self, words):
-        longest_word = sorted(words, key=len, reverse=True)[0]
-        try:
-            self.__validate_size(longest_word)
-        except ValueError:
-            self.width = self.height = (len(longest_word) // 5 + 1) * 5
-
-    def __validate_size(self, longest_word):
-        if len(longest_word) >= self.width:
-            raise ValueError("Width of puzzle can not be smaller than given word")
-        elif len(longest_word) >= self.height:
-            raise ValueError("Height of puzzle can not be smaller than given word")
-
-    def get_direction_options(self):
-        self.__randomize_direction_options()
-        match self.difficulty:
-            case Difficulty.EASY:
-                self.__randomize_directions_until_conditions_met(
-                    lambda: self.x_direction + self.y_direction == 1
-                )
-            case Difficulty.NORMAL:
-                self.__randomize_directions_until_conditions_met(
-                    random.choice(
-                        [
-                            lambda: self.x_direction + self.y_direction == 1,
-                            lambda: self.x_direction == 1 and self.y_direction != 0,
-                        ]
-                    )
-                )
-
-            case Difficulty.DIFFICULT:
-                self.__randomize_directions_until_conditions_met(
-                    random.choice(
-                        [
-                            lambda: self.x_direction == 1,
-                            lambda: self.x_direction == -1 or self.x_direction == 1,
-                        ]
-                    )
-                )
-        return self.x_direction, self.y_direction
-
-    def __randomize_direction_options(self):
-        self.x_direction = random.choice(list(Direction))
-        self.y_direction = random.choice(list(Direction))
-        while self.x_direction == 0 and self.y_direction == 0:
-            self.__randomize_direction_options()
-
-    def __randomize_directions_until_conditions_met(self, condition):
-        difficulty_configured = False
-        if condition():
-            difficulty_configured = True
-        while not difficulty_configured:
-            self.__randomize_direction_options()
-            if condition():
-                difficulty_configured = True
-
-
 class PuzzleData:
     def __init__(
         self,
         words,
-        puzzle_difficulty_option: PuzzleDifficultyOption,
+        puzzle_difficulty_option: DifficultyOption,
         is_uppercase: bool = False,
         is_hint_twist: bool = False,
     ):
@@ -156,7 +46,7 @@ class PuzzleData:
 
         self.set_difficulty_option(puzzle_difficulty_option)
 
-    def set_difficulty_option(self, puzzle_difficulty_option: PuzzleDifficultyOption):
+    def set_difficulty_option(self, puzzle_difficulty_option: DifficultyOption):
         puzzle_difficulty_option.configure(self.words)
         self.__difficulty_option = puzzle_difficulty_option
         self.puzzle = [
@@ -236,7 +126,7 @@ class PuzzleData:
         [print(i) for i in self.puzzle]
         return True
 
-    def __fill_word_in_puzzle(self, word: str, word_positions: List[Tuple[int, int]]):
+    def __fill_word_in_puzzle(self, word: str, word_positions: list[tuple[int, int]]):
         for letter, x, y in zip(word, *zip(*word_positions)):
             self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
 
@@ -266,7 +156,7 @@ class PuzzleData:
         letter_to_fill = random.choice(source_letters)
         return letter_to_fill
 
-    def __place_for_word_exists(self, word, word_positions: List[Tuple[int, int]]):
+    def __place_for_word_exists(self, word, word_positions: list[tuple[int, int]]):
         for x, y, letter in zip(*zip(*word_positions), word):
             if not (0 == self.puzzle[y][x] or letter == self.puzzle[y][x]):
                 return False
@@ -279,50 +169,13 @@ class PuzzleData:
         ]
 
 
-class WordPosition:
-    def __init__(self, word, width, height):
-        self.word_length = len(word)
-        self.width = width
-        self.height = height
-
-    def __get_positions(
-        self, total_length: int, word_length: int, direction: Direction
-    ):
-        match direction:
-            case Direction.FORWARD:
-                start_position = randint(0, total_length - word_length)
-                positions = [
-                    i for i in range(start_position, start_position + word_length)
-                ]
-            case Direction.STEADY:
-                start_position = randint(0, total_length - 1)
-                positions = [start_position for _ in range(word_length)]
-            case Direction.BACKWARD:
-                start_position = randint(word_length, total_length - 1)
-                positions = [
-                    i for i in range(start_position, start_position - word_length, -1)
-                ]
-        return positions
-
-    def get_word_positions(
-        self, x_direction: Direction, y_direction: Direction
-    ) -> List[Tuple[int, int]]:
-        word_positions = list(
-            zip(
-                self.__get_positions(self.width, self.word_length, x_direction),
-                self.__get_positions(self.height, self.word_length, y_direction),
-            )
-        )
-        return word_positions
-
-
 class Worksheet:
     def __init__(self, puzzle_data: PuzzleData):
         self.width = puzzle_data.width
         self.height = puzzle_data.height
         self.heading = puzzle_data.heading
         self.puzzle = puzzle_data.puzzle
-        self.hint: List[str] = puzzle_data.hint
+        self.hint: list[str] = puzzle_data.hint
         self.answer = puzzle_data.answer
         self.__configure_settings()
 
@@ -463,9 +316,13 @@ class Worksheet:
                 tcVAlign.set(qn("w:val"), "center")
                 tcPr.append(tcVAlign)
 
-    def save(self, filename):
-        self.answ_doc.save("./{}_정답.docx".format(filename))
-        self.document.save("./{}.docx".format(filename))
+    def save(self, filename_or_stream):
+        return self.document.save(filename_or_stream)
+        # self.answ_doc.save(filename_or_stream_answ)
+
+    @property
+    def get_doc(self):
+        return self.document
 
 
 if __name__ == "__main__":
@@ -498,7 +355,7 @@ if __name__ == "__main__":
     ]
     korean_words = ["경찰관", "오늘의음식점", "낱말찾기퍼즐", "한국어", "민주주의", "헌법", "법원"]
 
-    puzzle_difficulty_option = PuzzleDifficultyOption(Difficulty.DIFFICULT)
+    puzzle_difficulty_option = DifficultyOption(Difficulty.DIFFICULT)
     puzzle_data = PuzzleData(
         korean_words,
         puzzle_difficulty_option,
