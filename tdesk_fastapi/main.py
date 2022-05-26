@@ -1,7 +1,7 @@
 import io
 from enum import Enum
 
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
@@ -35,16 +35,21 @@ app.add_middleware(
 )
 
 
-@app.post("/wordsearch/")
-async def create_wordsearchs(wordsearch_model: WordSearchModel):
-    difficulty_option = DifficultyOption(wordsearch_model.difficulty)
-    words = [word.name for word in wordsearch_model.words]
-
+@app.get("/wordsearch/")
+async def create_wordsearchs(
+    difficulty: Difficulty,
+    is_uppercase: bool,
+    is_hint_twist: bool,
+    words: list[str] | None = Query(default=None),
+):
+    difficulty_option = DifficultyOption(difficulty)
+    # words = [word.name for word in wordsearch_model.words]
+    print(words)
     puzzle_data = PuzzleData(
         words,
         difficulty_option,
-        wordsearch_model.is_uppercase,
-        wordsearch_model.is_hint_twist,
+        is_uppercase,
+        is_hint_twist,
     )
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
@@ -52,10 +57,6 @@ async def create_wordsearchs(wordsearch_model: WordSearchModel):
     worksheet.write_answer()
     bio = io.BytesIO()
 
-    # response = JSONResponse(
-    #     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    # )
-    # response["Content-Disposition"] = "attachment; filename=download.docx"
     worksheet.save(bio)
     bio.seek(0)
     response = Response(
