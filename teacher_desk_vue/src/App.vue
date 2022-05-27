@@ -1,9 +1,10 @@
 <template>
   <div id="wrapper">
-    <nav class="navbar is-white">
+    <nav class="navbar is-white p-3 is-size-4">
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
-          <img src="./assets/교사의책상.png" />
+          <img src="./assets/logo.png" />
+          교사의 책상
         </router-link>
 
         <a
@@ -18,19 +19,17 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
-    </nav>
-    <nav class="navbar is-white">
       <div
         class="navbar-menu"
         id="navbar-menu"
         v-bind:class="{ 'is-active': showMobileMenu }"
       >
-        <div class="navbar-start">
-          <router-link to="/" class="navbar-item">🏠홈</router-link>
-          <router-link to="/wordsearch" class="navbar-item"
+        <div class="navbar-end">
+          <router-link to="/" class="navbar-item ">🏠홈</router-link>
+          <router-link to="/wordsearch" class="navbar-item "
             >📕낱말 찾기</router-link
           >
-          <button v-on:click="fetchData()">Hide the text below</button>
+          <!-- <button v-on:click="fetchData()">Hide the text below</button> -->
           <div class="is-align-items-center is-flex">
             <router-link
               to="/wordsearch/kr"
@@ -51,7 +50,7 @@
             >다른 퍼즐</router-link
           >
         </div>
-        <div class="navbar-end">
+        <!-- <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
               <router-link to="/log-in" class="button is-light"
@@ -63,9 +62,10 @@
               </router-link>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-    </nav>
+          </nav>
+
     <section>
       <router-view />
     </section>
@@ -128,5 +128,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../node_modules/bulma";
+@import "../sass/mystyles";
 </style>
