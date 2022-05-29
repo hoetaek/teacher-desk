@@ -317,8 +317,8 @@ class Worksheet:
                 tcPr.append(tcVAlign)
 
     def save(self, filename_or_stream):
+        # todo get answer of puzzle too
         return self.document.save(filename_or_stream)
-        # self.answ_doc.save(filename_or_stream_answ)
 
     @property
     def get_doc(self):

@@ -1,9 +1,7 @@
 import io
-from enum import Enum
 
 from fastapi import FastAPI, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
 from helper.wordsearch.difficulty_option import Difficulty
@@ -64,6 +62,8 @@ async def create_wordsearchs(
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
             "Content-Disposition": "attachment;filename=download.hwp",
+            "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "Access-Control-Expose-Headers": "Content-Disposition",
         },
     )
 
