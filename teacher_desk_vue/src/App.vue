@@ -1,8 +1,8 @@
 <template>
   <div id="wrapper">
-    <nav class="navbar is-white p-3 is-size-4">
+    <nav class="navbar is-white mx-6 px-6">
       <div class="navbar-brand">
-        <router-link to="/" class="navbar-item">
+        <router-link to="/" class="navbar-item title is-4">
           <img src="./assets/logo.png" />
           교사의 책상
         </router-link>
@@ -14,35 +14,14 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
-      <div class="navbar-menu" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
+      <div class="navbar-menu title is-4" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
         <div class="navbar-end">
-          <router-link to="/" class="navbar-item ">🏠홈</router-link>
-          <router-link to="/wordsearch" class="navbar-item ">📕낱말 찾기</router-link>
-          <button v-on:click="fetchData()">Hide the text below</button>
-          <!-- <button><a href="http://127.0.0.1:8000/wordsearch/?difficulty=DIFFICULT&is_uppercase=false&is_hint_twist=false&words=word,hello&responseType=blob">Hide the text below</a></button> -->
-          <div class="is-align-items-center is-flex">
-            <router-link to="/wordsearch/kr" class="navbar-item button is-small is-rounded is-primary"
-              v-if="!isKrHidden">한국어</router-link>
-          </div>
-          <div class="is-align-items-center is-flex">
-            <router-link to="/wordsearch/en" class="navbar-item button is-small is-rounded is-primary"
-              v-if="!isEnHidden">Eng</router-link>
-          </div>
-          <router-link to="/otherpuzzle" class="navbar-item">다른 퍼즐</router-link>
+          <router-link to="/" class="navbar-item ">소개</router-link>
+          <router-link to="/wordsearch" class="navbar-item ">활동지 만들기</router-link>
+          <router-link to="/otherpuzzle" class="navbar-item">블로그</router-link>
+          <router-link to="/ask" class="navbar-item">건의사항</router-link>
         </div>
-        <!-- <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <router-link to="/log-in" class="button is-light"
-                >로그인</router-link
-              >
-              <router-link to="/cart" class="button is-success">
-                <span class="icon"><i class="fas fa-shopping-cart"></i></span>
-                <span>Cart</span>
-              </router-link>
-            </div>
-          </div>
-        </div> -->
+
       </div>
     </nav>
 
@@ -126,5 +105,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../sass/mystyles";
+@import "../node_modules/bulma";
 </style>
