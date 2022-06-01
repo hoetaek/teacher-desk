@@ -1,0 +1,66 @@
+/**
+* Navbar
+**/
+
+a.navbar-item {
+    padding-left: 300;
+
+}
+
+.navbar-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#wrapper>nav>div.navbar-brand>a.router-link-active.router-link-exact-active.navbar-item.title.is-4 {
+    margin-bottom: 0;
+}
+
+.heading.is-4 {
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.heading.is-1 {
+    font-family: Inter;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 58px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.body.Regular-24.bold {
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.body.Regular-24 {
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+/**
+  * Body
+  **/
+
+/* .container .columns {
+    margin-left: 0;
+}
+
+.columns .column {
+    padding-left: 0;
+} */

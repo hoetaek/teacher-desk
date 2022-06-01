@@ -1,10 +1,9 @@
 <template>
   <div id="wrapper">
-    <nav class="navbar is-white mx-6 px-6">
+    <nav class="navbar is-white mx-auto ">
       <div class="navbar-brand">
-        <router-link to="/" class="navbar-item title is-4">
-          <img src="./assets/logo.png" />
-          교사의 책상
+        <router-link to="/" class="navbar-item">
+          <img src="./assets/brand.svg" width="280" />
         </router-link>
 
         <a class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-menu"
@@ -12,14 +11,15 @@
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
         </a>
       </div>
-      <div class="navbar-menu title is-4" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
-        <div class="navbar-end">
-          <router-link to="/" class="navbar-item ">소개</router-link>
-          <router-link to="/wordsearch" class="navbar-item ">활동지 만들기</router-link>
-          <router-link to="/otherpuzzle" class="navbar-item">블로그</router-link>
-          <router-link to="/ask" class="navbar-item">건의사항</router-link>
+      <div class="navbar-menu" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
+        <div class="navbar-end navbar-center">
+          <router-link to="/" class="navbar-item heading is-4">소개</router-link>
+          <router-link to="/wordsearch" class="navbar-item heading is-4">활동지 만들기</router-link>
+          <router-link to="/otherpuzzle" class="navbar-item heading is-4">블로그</router-link>
+          <router-link to="/ask" class="navbar-item heading is-4">건의사항</router-link>
         </div>
 
       </div>
@@ -29,9 +29,9 @@
       <router-view />
     </section>
 
-    <footer class="footer">
+    <!-- <footer class="footer">
       <p class="has-text-centered">Copyright (c) 2022</p>
-    </footer>
+    </footer> -->
   </div>
 </template>
 
@@ -106,4 +106,5 @@ export default {
 
 <style lang="scss">
 @import "../node_modules/bulma";
+@import "../css/mystyle.css";
 </style>
