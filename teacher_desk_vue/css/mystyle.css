@@ -2,20 +2,15 @@
 * Navbar
 **/
 
-a.navbar-item {
-    padding-left: 300;
-
-}
 
 .navbar-center {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    margin-right: 10%;
+    margin-left: 15%;
 }
 
-#wrapper>nav>div.navbar-brand>a.router-link-active.router-link-exact-active.navbar-item.title.is-4 {
+/* #wrapper>nav>div.navbar-brand>a.router-link-active.router-link-exact-active.navbar-item.title.is-4 {
     margin-bottom: 0;
-}
+} */
 
 .heading.is-4 {
     font-family: Inter;
