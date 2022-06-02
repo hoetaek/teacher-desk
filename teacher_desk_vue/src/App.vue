@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <nav class="navbar is-white mt-5 navbar-center is-spaced ">
+    <nav class="navbar is-white mt-5 navbar-center is-spaced">
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
           <img src="./assets/brand-cropped.svg" width="180" />
@@ -11,11 +11,10 @@
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
         </a>
       </div>
       <div class="navbar-menu" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
-        <div class="navbar-end navbar-center">
+        <div class="navbar-end">
           <router-link to="/" class="navbar-item heading is-4 mr-4">소개</router-link>
           <router-link to="/wordsearch" class="navbar-item heading is-4 mr-4">활동지 만들기</router-link>
           <router-link to="/otherpuzzle" class="navbar-item heading is-4 mr-4">블로그</router-link>
