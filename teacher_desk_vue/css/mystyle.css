@@ -3,9 +3,23 @@
 **/
 
 
-.navbar-center {
+.margin-center {
     margin-right: 15%;
     margin-left: 15%;
+}
+
+/* input[type="text"] {
+    background: transparent;
+    border: none;
+} */
+input {
+    text-align: center;
+}
+
+.center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 /* #wrapper>nav>div.navbar-brand>a.router-link-active.router-link-exact-active.navbar-item.title.is-4 {

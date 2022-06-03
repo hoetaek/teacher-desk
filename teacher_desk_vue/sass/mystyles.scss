@@ -1,11 +1,6 @@
 @charset "utf-8";
 $navbar-item-img-max-height: 400px;
-
-// @import "../node_modules/bulma/sass/utilities/_all.sass";
-// @import "../node_modules/bulma/sass/base/_all.sass";
-// @import "../node_modules/bulma/sass/elements/button.sass";
-// @import "../node_modules/bulma/sass/components/navbar.sass";
-// @import "../node_modules/bulma/sass/layout/section.sass";
-// @import "../node_modules/bulma/sass/helpers/typography.sass";
+$notification-radius: 20px;
+$notification-padding-ltr: 1rem 0rem 1rem 0rem;
 
 @import "../node_modules/bulma/bulma.sass"
