@@ -1,71 +1,34 @@
 <template>
     <div class="worksheet">
-
         <section class="section">
             <div class="mb-6">
-                <div class="title is-4 has-text-grey-light">아래 내용을 입력해주세요.</div>
+                <div class="title is-size-3-desktop is-size-4-tablet is-size-6-mobile has-text-grey-light">아이들이 찾게 될
+                    낱말의 언어를 선택해주세요</div>
             </div>
-            <div class="title is-3">01 아이들이 찾게 될 단어</div>
-            <div class="mx-6 mb-6">
-                <form class="has-text-centered" method="get">
-                    <div class="tile is-ancestor">
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                    </div>
-                    <div class="tile is-ancestor">
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child notification has-background-grey-lighter is-rounded">
-                                <input class="input is-static center-block" type="text" placeholder="단어">
-                            </article>
-                        </div>
-                    </div>
-                </form>
+            <div class="section columns is-flex">
+                <div class="column has-text-centered">
+                    <button @click="$router.push('/worksheet/kr')"
+                        class="button is-responsive is-size-1-desktop is-size-3-tablet is-size-6-mobile is-link">
+                        한국어
+                    </button>
+                </div>
+                <div class="column has-text-centered">
+                    <button @click="$router.push('/worksheet/en')"
+                        class="button is-responsive is-size-1-desktop is-size-3-tablet is-size-6-mobile is-info"
+                        tag="button">
+                        English
+                    </button>
+                </div>
+
             </div>
-            <div class="title is-3">02 문제의 난이도</div>
         </section>
 
     </div>
 </template>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+button {
+    border-radius: 20px;
+}
+</style>

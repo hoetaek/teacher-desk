@@ -16,10 +16,10 @@
         </div>
         <div class="navbar-menu" id="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
           <div class="navbar-end">
-            <router-link to="/about" class="navbar-item heading is-4 mr-4">소개</router-link>
-            <router-link to="/worksheet" class="navbar-item heading is-4 mr-4">활동지 만들기</router-link>
-            <router-link to="/blog" class="navbar-item heading is-4 mr-4">블로그</router-link>
-            <router-link to="/suggestions" class="navbar-item heading is-4 mr-4">건의사항</router-link>
+            <router-link to="/about" class="navbar-item heading is-4 px-5">소개</router-link>
+            <router-link to="/worksheet" class="navbar-item heading is-4 px-5">활동지 만들기</router-link>
+            <router-link to="/blog" class="navbar-item heading is-4 px-5">블로그</router-link>
+            <router-link to="/suggestions" class="navbar-item heading is-4 px-5">건의사항</router-link>
           </div>
 
         </div>
