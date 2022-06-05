@@ -138,7 +138,7 @@ export default {
         params.append("words", word);
       }
 
-      params.append("difficulty", "EASY");
+      params.append("difficulty", this.difficulty);
       params.append("is_uppercase", this.alphabetCase);
       params.append("is_hint_twist", this.isScrambled);
 
