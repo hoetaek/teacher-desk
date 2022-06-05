@@ -148,7 +148,10 @@ class PuzzleData:
                 data = "".join(list(set(re.findall(regex_f, search_target_f))))
                 source_letters = data
             case Language.ENGLISH:
-                source_letters = string.ascii_lowercase
+                if not self.is_uppercase:
+                    source_letters = string.ascii_lowercase
+                else:
+                    source_letters = string.ascii_uppercase
 
         source_letters = self.__difficulty_option.revise_source_letters(
             self.words, source_letters
