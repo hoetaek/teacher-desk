@@ -1,17 +1,15 @@
 <template>
   <section class="section">
-
     <div class="title is-3">01 아이들이 찾게 될 낱말</div>
 
     <div class="mx-6 mb-6">
 
       <div class="title is-4 has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
-      <form
-        class="has-text-centered"
-        method="get"
-      >
-        <enter-word :words="words"></enter-word>
-      </form>
+
+      <enter-word @text-input-changed="textInputChanged"></enter-word>
+      <!-- <enter-word @text-input-changed="textInputChanged"></enter-word>
+        <enter-word @text-input-changed="textInputChanged"></enter-word> -->
+
     </div>
     <div class="title is-3">02 문제 옵션</div>
     <div class="mx-6 mb-6">
@@ -24,7 +22,7 @@
         <selection-buttons
           :button_infos="difficulty_options"
           :selected_data="difficulty"
-          @buttonSeletedEvent="selectDifficulty"
+          @button-seleted-event="selectDifficulty"
         ></selection-buttons>
       </div>
 
@@ -35,7 +33,7 @@
         <selection-buttons
           :button_infos="alphabetCaseOptions"
           :selected_data="alphabetCase"
-          @buttonSeletedEvent="selectAlphabetCase"
+          @button-seleted-event="selectAlphabetCase"
         >
           <div class="tile is-parent">
           </div>
@@ -50,7 +48,7 @@
           <selection-buttons
             :button_infos="isScrambledOptions"
             :selected_data="isScrambled"
-            @buttonSeletedEvent="selectIsScrambled"
+            @button-seleted-event="selectIsScrambled"
           >
             <div class="tile is-parent">
             </div>
@@ -61,6 +59,7 @@
         type="submit"
         class="button is-info is-fullwidth is-size-1 has-text-weight-bold"
         id="make-worksheet"
+        @click="fetchWorksheet"
       >
         클릭하여 한글 파일로 다운로드 하기
       </button>
@@ -72,6 +71,9 @@
 <script>
 import EnterWord from "@/components/EnterWord.vue";
 import SelectionButtons from "@/components/SelectionButtons/SelectionButtons.vue";
+import axios from "axios";
+import fileDownload from "js-file-download";
+
 export default {
   components: { EnterWord, SelectionButtons },
   data() {
@@ -80,40 +82,40 @@ export default {
       difficulty_options: [
         {
           name: "쉬움",
-          value: "easy",
+          value: "EASY",
         },
         {
           name: "보통",
-          value: "normal",
+          value: "NORMAL",
         },
         {
           name: "어려움",
-          value: "difficult",
+          value: "DIFFICULT",
         },
       ],
       alphabetCaseOptions: [
         {
           name: "소문자",
-          value: "undercase",
+          value: false,
         },
         {
           name: "대문자",
-          value: "uppercase",
+          value: true,
         },
       ],
       isScrambledOptions: [
         {
           name: "예",
-          value: "scrambled",
+          value: true,
         },
         {
           name: "아니오",
-          value: "notScrambled",
+          value: false,
         },
       ],
-      difficulty: "easy",
-      alphabetCase: "undercase",
-      isScrambled: "notScrambled",
+      difficulty: "EASY",
+      alphabetCase: false,
+      isScrambled: false,
     };
   },
   methods: {
@@ -125,6 +127,50 @@ export default {
     },
     selectIsScrambled(selectedValue) {
       this.isScrambled = selectedValue;
+    },
+    textInputChanged(word_array) {
+      this.words = word_array;
+    },
+    fetchWorksheet: function () {
+      var params = new URLSearchParams();
+
+      for (const word of this.words) {
+        params.append("words", word);
+      }
+
+      params.append("difficulty", "EASY");
+      params.append("is_uppercase", this.alphabetCase);
+      params.append("is_hint_twist", this.isScrambled);
+
+      axios({
+        method: "GET",
+        url: "http://127.0.0.1:8000/wordsearch",
+        params: params,
+        responseType: "blob",
+        config: {
+          headers: {
+            Accept:
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "Access-Control-Allow-Origin": "http://localhost:8080",
+            "Content-Type":
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          },
+        },
+      }).then(function (response) {
+        const contentDisposition = response.headers["content-disposition"];
+        let fileName = "unknown";
+        if (
+          contentDisposition &&
+          contentDisposition.indexOf("attachment") !== -1
+        ) {
+          var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          var matches = filenameRegex.exec(contentDisposition);
+          if (matches != null && matches[1]) {
+            fileName = matches[1].replace(/['"]/g, "");
+          }
+        }
+        fileDownload(response.data, fileName);
+      });
     },
   },
 };

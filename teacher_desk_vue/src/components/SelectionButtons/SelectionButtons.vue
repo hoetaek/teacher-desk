@@ -33,7 +33,7 @@ export default {
   emits: ["buttonSeletedEvent"],
   props: {
     button_infos: Array,
-    selected_data: String,
+    selected_data: [String, Boolean],
   },
 };
 </script>
