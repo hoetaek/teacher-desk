@@ -41,6 +41,9 @@ class PuzzleData:
         if self.lang == Language.KOREAN and is_uppercase == True:
             raise ValueError("There is no uppercase in Korean")
 
+        if is_uppercase:
+            self.words = [i.upper() for i in self.words]
+        
         self.is_uppercase = is_uppercase
         self.is_hint_twist = is_hint_twist
 
@@ -79,8 +82,6 @@ class PuzzleData:
     def __make_hint(self):
         self.hint = []
         for word in self.words:
-            if self.is_uppercase:
-                word = word.upper()
             if self.is_hint_twist:
                 match self.lang:
                     case Language.ENGLISH:
@@ -128,7 +129,7 @@ class PuzzleData:
 
     def __fill_word_in_puzzle(self, word: str, word_positions: list[tuple[int, int]]):
         for letter, x, y in zip(word, *zip(*word_positions)):
-            self.puzzle[y][x] = letter.upper() if self.is_uppercase else letter
+            self.puzzle[y][x] = letter
 
     def __fill_random_letters(self):
         for i in range(self.__difficulty_option.height):
