@@ -31,7 +31,7 @@ class PuzzleData:
         is_hint_twist: bool = False,
     ):
 
-        self.words = words
+        self.words = list(filter(None, words))
 
         self.lang: Language
         if hgtk.checker.is_hangul(words[0]):
@@ -142,7 +142,7 @@ class PuzzleData:
         letter_to_fill: str
         match self.lang:
             case Language.KOREAN:
-                f = open("random_words.txt", "r")
+                f = open("./helper/wordsearch/random_words.txt", "r")
                 data = f.read()
                 regex_f = r"[가-힣]+"
                 search_target_f = data
