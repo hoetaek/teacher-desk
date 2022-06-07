@@ -1,14 +1,23 @@
 <template>
   <section class="section">
-    <div class="title is-3">01 아이들이 찾게 될 낱말</div>
+    <div class="title is-size-3-desktop is-size-4-mobile">01 아이들이 찾게 될 낱말</div>
 
     <div class="mx-6 mb-6">
 
       <div class="title is-4 has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
 
-      <enter-word @text-input-changed="firstTextInputChanged"></enter-word>
-      <enter-word @text-input-changed="secondTextInputChanged"></enter-word>
-      <enter-word @text-input-changed="thirdTextInputChanged"></enter-word>
+      <enter-word
+        @text-input-changed="firstTextInputChanged"
+        :validate-regex='/^[A-Za-z]+$/'
+      ></enter-word>
+      <enter-word
+        @text-input-changed="secondTextInputChanged"
+        :validate-regex='/^[A-Za-z]+$/'
+      ></enter-word>
+      <enter-word
+        @text-input-changed="thirdTextInputChanged"
+        :validate-regex='/^[A-Za-z]+$/'
+      ></enter-word>
 
     </div>
     <div class="title is-3">02 문제 옵션</div>
@@ -57,7 +66,7 @@
       </div>
       <button
         type="submit"
-        class="button is-info is-fullwidth is-size-1 has-text-weight-bold"
+        class="button is-info is-fullwidth is-size-2-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold"
         id="make-worksheet"
         @click="fetchWorksheet"
       >

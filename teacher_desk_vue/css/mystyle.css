@@ -7,6 +7,16 @@
     margin-right: 15%;
     margin-left: 15%;
 }
+/*Margin by pixel:*/
+@media screen and ( max-width: 680px ){
+    .margin-center{
+        margin-right: 5%;
+        margin-left: 5%; 
+    }
+    .section{
+        padding: 0;
+    }
+}
 
 /* input[type="text"] {
     background: transparent;
