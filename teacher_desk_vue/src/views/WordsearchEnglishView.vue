@@ -6,9 +6,9 @@
 
       <div class="title is-4 has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
 
-      <enter-word @text-input-changed="textInputChanged"></enter-word>
-      <!-- <enter-word @text-input-changed="textInputChanged"></enter-word>
-        <enter-word @text-input-changed="textInputChanged"></enter-word> -->
+      <enter-word @text-input-changed="firstTextInputChanged"></enter-word>
+      <enter-word @text-input-changed="secondTextInputChanged"></enter-word>
+      <enter-word @text-input-changed="thirdTextInputChanged"></enter-word>
 
     </div>
     <div class="title is-3">02 문제 옵션</div>
@@ -78,7 +78,9 @@ export default {
   components: { EnterWord, SelectionButtons },
   data() {
     return {
-      words: [],
+      first_row_texts: ["", "", "", "", ""],
+      second_row_texts: ["", "", "", "", ""],
+      third_row_texts: ["", "", "", "", ""],
       difficulty_options: [
         {
           name: "쉬움",
@@ -118,6 +120,15 @@ export default {
       isScrambled: false,
     };
   },
+  computed: {
+    words() {
+      return [
+        ...this.first_row_texts,
+        ...this.second_row_texts,
+        ...this.third_row_texts,
+      ];
+    },
+  },
   methods: {
     selectDifficulty(selectedValue) {
       this.difficulty = selectedValue;
@@ -128,8 +139,17 @@ export default {
     selectIsScrambled(selectedValue) {
       this.isScrambled = selectedValue;
     },
-    textInputChanged(word_array) {
-      this.words = word_array;
+    firstTextInputChanged(word_array) {
+      this.first_row_texts = word_array;
+      console.log(this.words);
+    },
+    secondTextInputChanged(word_array) {
+      this.second_row_texts = word_array;
+      console.log(this.words);
+    },
+    thirdTextInputChanged(word_array) {
+      this.third_row_texts = word_array;
+      console.log(this.words);
     },
     fetchWorksheet: function () {
       var params = new URLSearchParams();
