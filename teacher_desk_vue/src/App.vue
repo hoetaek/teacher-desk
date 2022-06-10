@@ -35,10 +35,24 @@
               to="/about"
               class="navbar-item heading is-4 px-5"
             >소개</router-link>
-            <router-link
-              to="/worksheet"
-              class="navbar-item heading is-4 px-5"
-            >활동지 만들기</router-link>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link heading is-4">
+                활동지 만들기
+              </a>
+              <div class="navbar-dropdown">
+                <router-link
+                  to="/wordsearch"
+                  class="navbar-item heading is-4"
+                > 낱말 찾기</router-link>
+                <router-link
+                  to="/puzzle"
+                  class="navbar-item heading is-4"
+                > 퍼즐</router-link>
+
+              </div>
+
+            </div>
+
             <router-link
               to="/blog"
               class="navbar-item heading is-4 px-5"
