@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/wordsearch',
     name: 'wordsearch',
-    component: () => import(/* webpackChunkName: "about" */ '../views/WorksheetView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/WordsearchView.vue')
   }, {
     path: '/wordsearch/en',
     name: 'english_wordsearch',
