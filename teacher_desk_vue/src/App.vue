@@ -30,37 +30,20 @@
           id="navbar-menu"
           v-bind:class="{ 'is-active': showMobileMenu }"
         >
+          <!-- todo change hover color -->
           <div class="navbar-end">
             <router-link
               to="/about"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
             >소개</router-link>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link is-size-4 has-text-weight-bold">
-                활동지 만들기
-              </a>
-              <div class="navbar-dropdown">
-                <router-link
-                  to="/wordsearch"
-                  class="navbar-item is-size-5"
-                > 낱말 찾기</router-link>
-                <router-link
-                  to="/puzzle"
-                  class="navbar-item is-size-5"
-                > 퍼즐</router-link>
-
-              </div>
-
-            </div>
-
             <router-link
-              to="/blog"
+              to="/wordsearch"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
-            >블로그</router-link>
+            >활동지 만들기</router-link>
             <router-link
-              to="/suggestions"
+              to="/board"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
-            >건의사항</router-link>
+            >게시판</router-link>
 
           </div>
 

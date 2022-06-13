@@ -28,14 +28,10 @@ const routes = [
     path: '/puzzle',
     name: 'puzzle',
     component: () => import(/* webpackChunkName: "about" */ '../views/PuzzleView.vue')
-  }, {
-    path: '/blog',
-    name: 'blog',
-    component: () => import(/* webpackChunkName: "about" */ '../views/BlogView.vue')
-  }, {
-    path: '/suggestions',
-    name: 'suggestions',
-    component: () => import(/* webpackChunkName: "about" */ '../views/SuggestionsView.vue')
+  },  {
+    path: '/board',
+    name: 'board',
+    component: () => import(/* webpackChunkName: "about" */ '../views/BoardView.vue')
   }
 ]
 

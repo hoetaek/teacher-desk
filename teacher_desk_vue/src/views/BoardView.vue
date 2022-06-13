@@ -1,5 +1,5 @@
 <template>
   <div class="suggestions">
-    <h1>This is an suggestions page</h1>
+    <h1>This is an Board page</h1>
   </div>
 </template>
