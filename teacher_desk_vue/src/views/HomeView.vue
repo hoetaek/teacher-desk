@@ -2,11 +2,11 @@
   <div class="home">
     <section class="section is-medium">
       <div class="container">
-        <div class="heading is-1 has-text-centered">
+        <div class="title is-1 has-text-centered">
           선생님은 쉽게, 아이들은 재밌게!
         </div>
         <div class="section">
-          <div class="body Regular-24 has-text-centered"><strong class="has-text-info">교사의책상</strong>은 학습놀이에 필요한 활동지를 쉽고
+          <div class="is-size-4 has-text-centered"><strong class="has-text-info">교사의책상</strong>은 학습놀이에 필요한 활동지를 쉽고
             빠르게
             만들어 주는
             곳입니다.
@@ -27,9 +27,7 @@
 
 <script>
 export default {
-  name: 'HomeView',
-  components: {
-
-  }
-}
+  name: "HomeView",
+  components: {},
+};
 </script>
