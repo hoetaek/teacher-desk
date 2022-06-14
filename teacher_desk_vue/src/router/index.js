@@ -13,6 +13,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
+    path: '/worksheet',
+    name: 'worksheet',
+    component: () => import(/* webpackChunkName: "about" */ '../views/WorksheetView.vue')
+  }, {
     path: '/wordsearch',
     name: 'wordsearch',
     component: () => import(/* webpackChunkName: "about" */ '../views/WordsearchView.vue')

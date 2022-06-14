@@ -37,7 +37,7 @@
               class="navbar-item is-size-4 has-text-weight-bold px-5"
             >소개</router-link>
             <router-link
-              to="/wordsearch"
+              to="/worksheet"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
             >활동지 만들기</router-link>
             <router-link
