@@ -14,7 +14,10 @@
           </div>
         </div>
         <div class="has-text-centered">
-          <button class="button is-info">
+          <button
+            class="button is-info has-text-centered"
+            @click="$router.push('/worksheet')"
+          >
             <span class="icon">
               <i class="fas fa-plus"></i>
             </span><span>활동지 만들기</span>
