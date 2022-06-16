@@ -13,7 +13,13 @@
       </div>
     </div>
 
-    <div class="title size-is-3 has-text-centered">낱말 찾기</div>
+    <div
+      @click="$router.push('/wordsearch')"
+      @mouseover="isHover=true"
+      @mouseleave="isHover=false"
+      style="cursor: pointer"
+      :class="classObject"
+    >낱말 찾기</div>
     <div class="has-text-centered">주어진 낱말을
       여러 낱말들 속에서
       찾으며 주요 낱말을
@@ -21,5 +27,20 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isHover: false,
+    };
+  },
+  computed: {
+    classObject: function () {
+      return {
+        "title size-is-3 has-text-centered": true,
+        "has-text-link": this.isHover,
+        "is-underlined": this.isHover,
+      };
+    },
+  },
+};
 </script>
