@@ -51,14 +51,12 @@
         <div class="column is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold">
           찾는 낱말의 철자 순서 섞기 (Scramble)
         </div>
-        <div class="column">
-          <selection-buttons
-            :button_infos="isScrambledOptions"
-            :selected_data="isScrambled"
-            @button-seleted-event="selectIsScrambled"
-          >
-          </selection-buttons>
-        </div>
+        <selection-buttons
+          :button_infos="isScrambledOptions"
+          :selected_data="isScrambled"
+          @button-seleted-event="selectIsScrambled"
+        >
+        </selection-buttons>
       </div>
       <button
         type="submit"
