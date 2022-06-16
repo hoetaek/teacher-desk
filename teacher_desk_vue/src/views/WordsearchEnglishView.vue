@@ -2,9 +2,9 @@
   <section class="section">
     <div class="title is-size-3-desktop is-size-4-mobile">01 아이들이 찾게 될 낱말</div>
 
-    <div class="mx-6 mb-6">
+    <div class="mb-6">
 
-      <div class="title is-4 has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
+      <div class="title is-size-4-desktop is-size-5-tablet is-size-5-mobile has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
 
       <enter-word
         @text-input-changed="firstTextInputChanged"
@@ -14,18 +14,18 @@
         @text-input-changed="secondTextInputChanged"
         :validate-regex='/^[A-Za-z]+$/'
       ></enter-word>
-      <enter-word
+      <!-- <enter-word
         @text-input-changed="thirdTextInputChanged"
         :validate-regex='/^[A-Za-z]+$/'
-      ></enter-word>
+      ></enter-word> -->
 
     </div>
-    <div class="title is-3">02 문제 옵션</div>
-    <div class="mx-6 mb-6">
-      <div class="title is-4 has-text-grey-light">원하는 옵션을 선택해주세요.</div>
+    <div class="title is-size-3-desktop is-size-4-mobile">02 문제 옵션</div>
+    <div class="mb-6">
+      <div class="title is-size-4-desktop is-size-5-tablet is-size-5-mobile has-text-grey-light">원하는 옵션을 선택해주세요.</div>
 
       <div class="columns is-vcentered">
-        <div class="column is-size-4 has-text-weight-bold">
+        <div class="column is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold">
           난이도
         </div>
         <selection-buttons
@@ -36,7 +36,7 @@
       </div>
 
       <div class="columns is-vcentered">
-        <div class="column is-size-4 has-text-weight-bold">
+        <div class="column is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold">
           대소문자 선택하기
         </div>
         <selection-buttons
@@ -44,13 +44,11 @@
           :selected_data="alphabetCase"
           @button-seleted-event="selectAlphabetCase"
         >
-          <div class="tile is-parent">
-          </div>
         </selection-buttons>
 
       </div>
       <div class="columns is-vcentered">
-        <div class="column is-size-4 has-text-weight-bold">
+        <div class="column is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold">
           찾는 낱말의 철자 순서 섞기 (Scramble)
         </div>
         <div class="column">
@@ -59,14 +57,12 @@
             :selected_data="isScrambled"
             @button-seleted-event="selectIsScrambled"
           >
-            <div class="tile is-parent">
-            </div>
           </selection-buttons>
         </div>
       </div>
       <button
         type="submit"
-        class="button is-info is-fullwidth is-size-2-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold"
+        class="button is-info is-fullwidth is-size-2-desktop is-size-4-tablet is-size-6-mobile has-text-weight-bold"
         id="make-worksheet"
         @click="fetchWorksheet"
       >

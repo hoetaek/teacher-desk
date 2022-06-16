@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       defaultClass:
-        "button is-fullwidth is-fullheight has-text-white is-size-4 has-text-weight-bold",
+        "button is-fullwidth is-fullheight has-text-white is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold",
     };
   },
   computed: {
