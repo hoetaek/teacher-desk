@@ -35,14 +35,17 @@
             <router-link
               to="/about"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
+              style="color: #6B6B6B"
             >소개</router-link>
             <router-link
               to="/worksheet"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
+              style="color: #6B6B6B"
             >활동지 만들기</router-link>
             <router-link
               to="/board"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
+              style="color: #6B6B6B"
             >게시판</router-link>
 
           </div>
@@ -70,4 +73,7 @@ export default {
 
 <style lang="scss">
 @import "../css/mystyles.css";
+.router-link-active {
+  color: #000000 !important;
+}
 </style>
