@@ -203,8 +203,4 @@ export default {
 #make-worksheet {
   border-radius: 0px;
 }
-
-.tile.is-child {
-  padding: 10px;
-}
 </style>
