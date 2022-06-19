@@ -1,5 +1,5 @@
 <template>
-  <div class="level">
+  <div class="section level">
     <worksheet-tile></worksheet-tile>
     <worksheet-tile></worksheet-tile>
     <worksheet-tile></worksheet-tile>
