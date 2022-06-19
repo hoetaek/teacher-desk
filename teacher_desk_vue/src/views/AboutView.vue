@@ -4,8 +4,7 @@
       <figure class="image is-inline-block">
         <img
           :src="logo"
-          width="169.04"
-          style="margin: 0 0 -20px 0;"
+          style="margin: 0 0 -20px 0; width:169.04px"
         />
       </figure>
       <div class="title is-3 has-text-weight-bold">교사의 책상</div>
