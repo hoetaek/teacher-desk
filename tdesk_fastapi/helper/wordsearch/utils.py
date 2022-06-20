@@ -324,10 +324,6 @@ class Worksheet:
         # todo get answer of puzzle too
         return self.document.save(filename_or_stream)
 
-    @property
-    def get_doc(self):
-        return self.document
-
 
 if __name__ == "__main__":
     english_words = [
