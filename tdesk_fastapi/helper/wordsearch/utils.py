@@ -284,8 +284,8 @@ class Worksheet:
 
     def write_answer(self):
         # 정답 파일 쓰기
-        self.answ_doc = Document()
-        answer_table = self.answ_doc.add_table(
+        self.document.add_page_break()
+        answer_table = self.document.add_table(
             rows=self.height, cols=self.width, style="Table Grid"
         )
         answer_table.alignment = WD_TABLE_ALIGNMENT.CENTER
