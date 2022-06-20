@@ -159,18 +159,7 @@ export default {
           },
         },
       }).then(function (response) {
-        const contentDisposition = response.headers["content-disposition"];
-        let fileName = "unknown";
-        if (
-          contentDisposition &&
-          contentDisposition.indexOf("attachment") !== -1
-        ) {
-          var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-          var matches = filenameRegex.exec(contentDisposition);
-          if (matches != null && matches[1]) {
-            fileName = matches[1].replace(/['"]/g, "");
-          }
-        }
+        let fileName = "낱말찾기퍼즐.hwp";
         fileDownload(response.data, fileName);
       });
     },

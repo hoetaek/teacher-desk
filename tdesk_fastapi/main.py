@@ -61,7 +61,7 @@ async def create_wordsearchs(
         bio.getvalue(),
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
-            "Content-Disposition": "attachment;filename=download.hwp",
+            "Content-Disposition": "attachment;",
             "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "Access-Control-Expose-Headers": "Content-Disposition",
         },
