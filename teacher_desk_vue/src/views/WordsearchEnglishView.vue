@@ -155,6 +155,8 @@ export default {
       console.log(this.words);
     },
     fetchWorksheet: function () {
+      let words = this.words.filter((n) => n);
+      if (words == 0) return;
       var params = new URLSearchParams();
 
       for (const word of this.words) {
