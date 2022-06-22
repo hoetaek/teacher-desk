@@ -4,7 +4,7 @@
 
     <div class="mx-6 mb-6">
 
-      <div class="title is-4 has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
+      <div class="title is-size-4-desktop is-size-5-tablet is-size-5-mobile has-text-grey-light">아래에 낱말을 입력해주세요. (모두 안채워도 괜찮아요!)</div>
 
       <enter-word
         @text-input-changed="firstTextInputChanged"
@@ -20,12 +20,12 @@
       ></enter-word>
 
     </div>
-    <div class="title is-3">02 문제 옵션</div>
+    <div class="title is-size-3-desktop is-size-4-mobile">02 문제 옵션</div>
     <div class="mx-6 mb-6">
-      <div class="title is-4 has-text-grey-light">원하는 옵션을 선택해주세요.</div>
+      <div class="title is-size-4-desktop is-size-5-tablet is-size-5-mobile has-text-grey-light">원하는 옵션을 선택해주세요.</div>
 
       <div class="columns is-vcentered">
-        <div class="column is-size-4 has-text-weight-bold">
+        <div class="column is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold">
           난이도
         </div>
         <selection-buttons
@@ -36,7 +36,7 @@
       </div>
 
       <div class="columns is-vcentered">
-        <div class="column is-size-4 has-text-weight-bold">
+        <div class="column is-size-4-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold">
           초성 힌트 제공
         </div>
         <div class="column">
@@ -52,7 +52,7 @@
       </div>
       <button
         type="submit"
-        class="button is-info is-fullwidth is-size-2-desktop is-size-4-tablet is-size-5-mobile has-text-weight-bold"
+        class="button is-info is-fullwidth is-size-2-desktop is-size-4-tablet is-size-6-mobile has-text-weight-bold"
         id="make-worksheet"
         @click="fetchWorksheet"
       >
