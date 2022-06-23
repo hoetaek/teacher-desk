@@ -29,9 +29,9 @@ const routes = [
     name: 'korean_wordsearch',
     component: () => import(/* webpackChunkName: "about" */ '../views/WordsearchKoreanView.vue')
   }, {
-    path: '/board',
-    name: 'board',
-    component: () => import(/* webpackChunkName: "about" */ '../views/BoardView.vue')
+    path: '/suggestion',
+    name: 'suggestion',
+    component: () => import(/* webpackChunkName: "about" */ '../views/SuggestionView.vue')
   }
 ]
 

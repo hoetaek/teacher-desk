@@ -43,10 +43,10 @@
               style="color: #6B6B6B"
             >활동지 만들기</router-link>
             <router-link
-              to="/board"
+              to="/suggestion"
               class="navbar-item is-size-4 has-text-weight-bold px-5"
               style="color: #6B6B6B"
-            >게시판</router-link>
+            >건의사항</router-link>
 
           </div>
 
