@@ -27,8 +27,17 @@
   </div>
 </template>
 <style>
-.textarea {
+.textarea,
+.textarea:focus {
   border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none;
 }
 
 .box {
