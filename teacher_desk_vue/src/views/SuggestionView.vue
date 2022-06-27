@@ -21,7 +21,6 @@
           </button>
         </div>
       </div>
-
     </section>
   </div>
 </template>
@@ -46,7 +45,7 @@ textarea::placeholder {
 }
 
 .container {
-  width: 40%;
+  width: 45%;
   border: solid 2px;
   border-radius: 25px;
 }
