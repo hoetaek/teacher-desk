@@ -1,23 +1,21 @@
 import io
 
-from fastapi import FastAPI, Response, Query
+from fastapi import Depends, FastAPI, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
 from helper.wordsearch.difficulty_option import Difficulty
 from helper.wordsearch.utils import DifficultyOption, PuzzleData, Worksheet
 
 
-class Word(BaseModel):
-    name: str
-
-
-class WordSearchModel(BaseModel):
-    difficulty: Difficulty
-    is_uppercase: bool = False
-    is_hint_twist: bool = False
-    words: list[Word]
-
+class WordSearchParams:
+    def __init__(self, difficulty: Difficulty,
+    is_uppercase: bool,
+    is_hint_twist: bool,
+    words: list[str] | None = Query(default=None)):
+        self.difficulty = difficulty
+        self.is_uppercase = is_uppercase
+        self.is_hint_twist = is_hint_twist
+        self.words = words
 
 app = FastAPI()
 origins = [
@@ -35,19 +33,15 @@ app.add_middleware(
 
 @app.get("/wordsearch/")
 async def create_wordsearchs(
-    difficulty: Difficulty,
-    is_uppercase: bool,
-    is_hint_twist: bool,
-    words: list[str] | None = Query(default=None),
+    wordsearch : WordSearchParams = Depends(WordSearchParams),
 ):
-    difficulty_option = DifficultyOption(difficulty)
-    # words = [word.name for word in wordsearch_model.words]
-    print(words)
+    difficulty_option = DifficultyOption(wordsearch.difficulty)
+    print(wordsearch.words)
     puzzle_data = PuzzleData(
-        words,
+        wordsearch.words,
         difficulty_option,
-        is_uppercase,
-        is_hint_twist,
+        wordsearch.is_uppercase,
+        wordsearch.is_hint_twist,
     )
     puzzle_data.make()
     worksheet = Worksheet(puzzle_data)
