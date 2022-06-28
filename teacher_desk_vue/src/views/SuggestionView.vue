@@ -24,7 +24,7 @@
     </section>
   </div>
 </template>
-<style>
+<style scoped>
 .textarea,
 .textarea:focus {
   border: none;
