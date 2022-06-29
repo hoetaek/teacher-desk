@@ -5,7 +5,7 @@
         <div class="card-image">
           <figure class="image is-square">
             <img
-              src="../assets/wordsearch_image.png"
+              :src="require(`@/assets/${filename}`)"
               alt="Image"
             >
           </figure>
@@ -21,15 +21,24 @@
             @mouseleave="isHover=false"
             style="cursor: pointer"
             :class="classObject"
-          >낱말 찾기</h1>
-          <span class="subtitle is-4">주어진 낱말에서 학습할 낱말 찾기</span>
+          >
+            <slot name="title"></slot>
+          </h1>
+          <span class="subtitle is-4">
+            <slot name="description"></slot>
+          </span>
           <br>
           <div class="level">
             <div class="level-item level-right">
               <div class="icon is-medium">
-                <i class="fas fa-heart"></i>
+                <div v-if="liked"><i class="fas fa-heart"></i></div>
+                <div v-else>
+                  <i class="far fa-heart"></i>
+                </div>
               </div>
-              <span>10</span>
+              <span>
+                <slot name="heartNum"></slot>
+              </span>
 
             </div>
 
@@ -46,6 +55,10 @@ export default {
     return {
       isHover: false,
     };
+  },
+  props: {
+    filename: String,
+    liked: Boolean,
   },
   computed: {
     classObject: function () {
