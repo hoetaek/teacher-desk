@@ -21,6 +21,7 @@
         <worksheet-tile
           :filename="wordsearchPath"
           :liked="false"
+          :isNotReady="true"
         ><template #title>
 
             말판 놀이
@@ -37,6 +38,7 @@
         <worksheet-tile
           :filename="wordsearchPath"
           :liked="false"
+          :isNotReady="true"
         ><template #title>
             도블
           </template>

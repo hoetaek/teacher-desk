@@ -1,6 +1,10 @@
 <template >
   <div>
     <div class="card">
+      <div
+        v-if="isNotReady"
+        class="overlay title is-size-3 center"
+      >업데이트 예정</div>
       <div class="container p-4">
         <div class="card-image">
           <figure class="image is-square">
@@ -41,10 +45,12 @@
               </span>
 
             </div>
-
           </div>
+
         </div>
+
       </div>
+
     </div>
 
   </div>
@@ -59,6 +65,7 @@ export default {
   props: {
     filename: String,
     liked: Boolean,
+    isNotReady: Boolean,
   },
   computed: {
     classObject: function () {
@@ -72,16 +79,31 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   box-shadow: none;
   border: solid 3px;
-  border-radius: 20px;
+  border-radius: 25px;
 }
-
 .icon {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  position: absolute;
+  opacity: 0.8;
+  background-color: #b8b8b8;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  z-index: 3;
+  color: black;
+}
+.center {
+  display: flex;
+  justify-content: center; /* align horizontal */
   align-items: center;
 }
 </style>
