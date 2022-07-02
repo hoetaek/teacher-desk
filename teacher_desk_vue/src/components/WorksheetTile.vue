@@ -98,7 +98,7 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  z-index: 3;
+  z-index: 2;
   color: black;
 }
 .center {
