@@ -12,7 +12,6 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
-
 from helper.wordsearch.difficulty_option import Difficulty, DifficultyOption
 from helper.wordsearch.word_position import WordPosition
 
@@ -43,7 +42,7 @@ class PuzzleData:
 
         if is_uppercase:
             self.words = [i.upper() for i in self.words]
-        
+
         self.is_uppercase = is_uppercase
         self.is_hint_twist = is_hint_twist
 

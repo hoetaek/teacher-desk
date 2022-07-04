@@ -2,6 +2,7 @@ import io
 
 from fastapi import Depends, FastAPI, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+
 from helper.wordsearch.difficulty_option import Difficulty
 from helper.wordsearch.utils import DifficultyOption, PuzzleData, Worksheet
 
