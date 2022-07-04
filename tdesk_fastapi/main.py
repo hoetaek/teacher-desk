@@ -1,21 +1,24 @@
 import io
 
-from fastapi import Depends, FastAPI, Response, Query
+from fastapi import Depends, FastAPI, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
-
 from helper.wordsearch.difficulty_option import Difficulty
 from helper.wordsearch.utils import DifficultyOption, PuzzleData, Worksheet
 
 
 class WordSearchParams:
-    def __init__(self, difficulty: Difficulty,
-    is_uppercase: bool,
-    is_hint_twist: bool,
-    words: list[str] | None = Query(default=None)):
+    def __init__(
+        self,
+        difficulty: Difficulty,
+        is_uppercase: bool,
+        is_hint_twist: bool,
+        words: list[str] | None = Query(default=None),
+    ):
         self.difficulty = difficulty
         self.is_uppercase = is_uppercase
         self.is_hint_twist = is_hint_twist
         self.words = words
+
 
 app = FastAPI()
 origins = [
@@ -33,7 +36,7 @@ app.add_middleware(
 
 @app.get("/wordsearch/")
 async def create_wordsearchs(
-    wordsearch : WordSearchParams = Depends(WordSearchParams),
+    wordsearch: WordSearchParams = Depends(WordSearchParams),
 ):
     difficulty_option = DifficultyOption(wordsearch.difficulty)
     print(wordsearch.words)
@@ -53,12 +56,24 @@ async def create_wordsearchs(
     bio.seek(0)
     response = Response(
         bio.getvalue(),
-        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        media_type="application/vnd.openxmlformats-officedocument."
+        "wordprocessingml.document",
         headers={
             "Content-Disposition": "attachment;",
-            "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "Content-Type": "application/vnd.openxmlformats-officedocument."
+            "wordprocessingml.document",
             "Access-Control-Expose-Headers": "Content-Disposition",
         },
     )
 
     return response
+
+
+@app.get("/worksheets/")
+async def get_worksheets():
+    pass
+
+
+@app.get("/suggestions/")
+async def get_suggestions():
+    pass
