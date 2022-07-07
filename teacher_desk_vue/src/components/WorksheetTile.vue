@@ -19,11 +19,10 @@
 
         <div class="content">
           <h1
-            class="title has-text-left"
+            class="title has-text-left is-clickable"
             @click="$router.push('/wordsearch')"
             @mouseover="isHover=true"
             @mouseleave="isHover=false"
-            style="cursor: pointer"
             :class="classObject"
           >
             <slot name="title"></slot>
